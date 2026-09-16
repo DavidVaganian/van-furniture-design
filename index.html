@@ -362,6 +362,14 @@ tbody td.mute{color:var(--mute);font-size:12.5px;font-family:var(--sans)}
   @page{size:A3 landscape;margin:0}
   #viewport svg{width:100%!important}
   body{background:#fff}.card{border:none;padding:0}.cols{grid-template-columns:1fr 1fr}}
+#printSheets{display:none}
+@media print{
+  body.printing-drawings>header,body.printing-drawings>nav,body.printing-drawings>section{display:none!important}
+  body.printing-drawings #printSheets{display:block}
+  #printSheets .pg{width:420mm;height:297mm;page-break-after:always;break-after:page}
+  #printSheets .pg:last-child{page-break-after:auto;break-after:auto}
+  #printSheets svg{display:block;width:420mm;height:297mm}
+}
 </style>
 </head>
 <body>
@@ -479,7 +487,7 @@ tbody td.mute{color:var(--mute);font-size:12.5px;font-family:var(--sans)}
   </div>
   <h2 style="margin-top:28px" data-t="priceh"></h2>
   <div class="card" style="padding:12px 14px;overflow-x:auto"><div id="price"></div></div>
-  <div class="actions"><button class="btn" onclick="window.print()" data-t="print"></button>
+  <div class="actions"><button class="btn" id="downloadDrawingsBtn" onclick="downloadDrawings()" data-t="print"></button>
     <button class="btn ghost undoBtn" onclick="undo()"></button>
     <button class="btn ghost redoBtn" onclick="redo()"></button>
     <button class="btn ghost" data-go="3" data-t="changemeas"></button>
@@ -590,7 +598,7 @@ en:{lang:'EN',brand:'Furniture design<br>&amp; construction',
  priceh:'Estimate',pMat:'Board',pEdge:'Edge-banding',pHw:'Hardware',pLabour:'Labour',
  pCost:'Cost',pMargin:'Margin',pTotal:'Price',
  pPlaceholder:'Placeholder rates — set the workshop’s real prices in RATES before quoting.',
- print:'Print everything',changemeas:'Change the measurements',newjob:'New job',
+ print:'Download drawings',drawingsDownloaded:'Drawings ready — choose “Save as PDF” in the print dialog',changemeas:'Change the measurements',newjob:'New job',
  views:['Front','Side','3D','Exploded','Realistic','AI photo'],kitchenViews:['Front','Plan','3D','Exploded','Realistic','AI photo'],
  aiTitle:'AI photo',aiGen:'Generate photo',aiRegen:'Generate again',aiWorking:'Generating the image…',
  aiHiQ:'High quality',aiNote:"Illustration for the customer's eye — not to scale, not a production drawing.",
@@ -709,7 +717,7 @@ hy:{lang:'ՀԱՅ',brand:'Կահույքի նախագծում<br>և արտադր�
  depth:'Խորություն<small>Դա որոշում եք դուք, ոչ թե նկարը</small>',scribe:'Հարմարեցման նպաստ յուրաքանչյուր կողմից',
  howfits:'Ինչպես է տեղավորվում',makedraw:'Պատրաստել գծագրերը',back:'Հետ',
  s4h:'Պատրաստ է արտադրության',checks:'Ստուգումներ',hardware:'Ֆուռնիտուրա',cutlist:'Կտրման ցուցակ',
- matcalc:'Անհրաժեշտ նյութ',print:'Տպել ամբողջը',changemeas:'Փոխել չափսերը',newjob:'Նոր պատվեր',
+ matcalc:'Անհրաժեշտ նյութ',print:'Ներբեռնել գծագրերը',drawingsDownloaded:'Գծագրերը պատրաստ են — տպելու պատուհանում ընտրեք «Պահպանել որպես PDF»',changemeas:'Փոխել չափսերը',newjob:'Նոր պատվեր',
  priceh:'Գնահատում',pMat:'Սալիկ',pEdge:'Եզրաշերտ',pHw:'Ֆուռնիտուրա',pLabour:'Աշխատավարձ',
  pCost:'Ինքնարժեք',pMargin:'Մարժա',pTotal:'Գին',
  pPlaceholder:'Ժամանակավոր գներ — գնանշումից առաջ նշեք արտադրամասի իրական գները RATES-ում։',
@@ -823,7 +831,7 @@ ru:{lang:'РУС',brand:'Проектирование<br>и производст
  depth:'Глубина<small>Её задаёте вы, а не фото</small>',scribe:'Припуск на подгонку с каждой стороны',
  howfits:'Как встанет',makedraw:'Сделать чертежи',back:'Назад',
  s4h:'Готово к производству',checks:'Проверки',hardware:'Фурнитура',cutlist:'Список деталей',
- matcalc:'Требуется материала',print:'Распечатать всё',changemeas:'Изменить замеры',newjob:'Новый заказ',
+ matcalc:'Требуется материала',print:'Скачать чертежи',drawingsDownloaded:'Чертежи готовы — выберите «Сохранить как PDF» в диалоге печати',changemeas:'Изменить замеры',newjob:'Новый заказ',
  priceh:'Оценка',pMat:'Плита',pEdge:'Кромка',pHw:'Фурнитура',pLabour:'Работа',
  pCost:'Себестоимость',pMargin:'Наценка',pTotal:'Цена',
  pPlaceholder:'Ориентировочные ставки — перед расчётом укажите реальные цены мастерской в RATES.',
@@ -4578,6 +4586,44 @@ function downloadProject(){
   a.href=url;a.download=base+'.van.json';document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1000);saveStatus('projectSaved');
 }
+/* §6 §7 — the download is the same GOST-convention A3 sheets shown on
+   screen (drawSheet, the print renderer), never a re-derivation, so what
+   the customer downloads can never drift from what step 4 shows. Fixed,
+   deliberate order — front elevation (overall shape + primary dimensions)
+   → side/plan (depth, or the kitchen/bathroom layout plan) → oblique 3D
+   (open + closed, for spatial reading) → exploded + cut-list schedule
+   (assembly, last, closest to the workshop's own use) — so dimensions
+   read from general to specific instead of arriving as an unsorted pile.
+   Customer-eye renders (Realistic / 3D Studio / AI photo) are pictures,
+   not drawings (§7 — never for the saw), so they are deliberately left
+   out of this download. No PDF library is bundled (the app stays a single
+   offline file, §-architecture) — the browser's own print-to-PDF turns
+   the assembled A3 pages into one real file the user saves.  */
+function assembleDrawingSet(res,fit,cfg){
+  return ['front','side','iso','exploded']
+    .map(v=>`<div class="pg">${drawSheet(res,fit,cfg,v)}</div>`).join('');
+}
+function downloadDrawings(){
+  if(!cfg)return;
+  const{o}=readOpening();
+  const fit=fitOpening({wT:o.wT,wM:o.wM,wB:o.wB,hL:o.hL,hC:o.hC,hR:o.hR,depth:o.dP,scribe:o.sc});
+  resolveParametrics(cfg,fit);
+  const res=generate(cfg,fit);
+  const prevTitle=document.title;
+  document.title=(PROJ.number||'VAN-project').replace(/[^a-z0-9_-]+/gi,'-');
+  $('printSheets').innerHTML=assembleDrawingSet(res,fit,cfg);
+  document.body.classList.add('printing-drawings');
+  let done=false;
+  const cleanup=()=>{ if(done)return; done=true;
+    document.body.classList.remove('printing-drawings');
+    $('printSheets').innerHTML='';
+    document.title=prevTitle;
+    window.removeEventListener('afterprint',cleanup); };
+  window.addEventListener('afterprint',cleanup);
+  window.print();
+  setTimeout(cleanup,60000);   /* afterprint is reliable everywhere VAN targets — this is only a last-resort net */
+  saveStatus('drawingsDownloaded');
+}
 function loadProjectData(st){
   if(!st||st.schema!=='van-project'||!st.cfg||!Array.isArray(st.cfg.columns))return false;
   restoreSnapshot(st);UNDO.length=0;REDO.length=0;
@@ -5694,5 +5740,6 @@ $('noPhoto').addEventListener('change',e=>{
 if(!restoreAutosave())applyLang(); /* resume the last project when one exists */
 memLoad().then(()=>{ if(step===2)renderConfirm(); });
 </script>
+<div id="printSheets" aria-hidden="true"></div>
 </body>
 </html>
