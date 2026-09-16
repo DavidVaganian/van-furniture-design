@@ -3874,19 +3874,103 @@ s.plinth?`A recessed plinth ${s.plinth.height} mm tall runs along the whole floo
 }
 
 /* STEP 1 → STEP 2, with the studio-photo framing around it. */
-function buildImagePrompt(cfg,fit,res){
+/* A clean, dimension-free front view for the AI reference image — no A3
+   sheet, no title block, no dimension chains, no balloons, no swing arcs:
+   just the fills, grain and handles, exactly the geometry a photo would
+   show, straight off the SAME res.parts the drawing and schedule come from
+   (§3). Sending the model a picture of the actual layout, not only a text
+   description of it, is what the "det skal have selve tegningen, ikke kun
+   tekst" request asks for — OpenAI's own guidance is that a pure-text
+   prompt cannot guarantee millimetre-exact placement in a composition this
+   structured; an image reference plus the literal text is measurably more
+   reliable, and is still verified afterwards against the same res.parts
+   (§3) rather than trusted blind. */
+function frontPreviewSVG(res,fit,cfg){
+  let lo=0,hi=mmv(fit.W);
+  for(const p of res.parts)for(const b of p.boxes){
+    const a=mmv(b.x),w=mmv(b.w); lo=Math.min(lo,a); hi=Math.max(hi,a+w);
+  }
+  const ch=mmv(fit.H), cw=hi-lo, pad=Math.max(cw,ch)*.06;
+  const vw=cw+2*pad, vh=ch+2*pad;
+  const X=v=>mmv(v)-lo+pad, Y=v=>mmv(v)+pad;
+  const grained=(cfg.material==='veneer'||cfg.material==='solid');
+  let g=`<rect x="0" y="0" width="${vw}" height="${vh}" fill="#F4F2EE"/>`;
+  res.parts.forEach(p=>{
+    p.boxes.forEach(b=>{
+      const isFront=p.mat==='front'&&p.k!=='filler';
+      const X0=X(b.x),Y0=Y(b.y),W0=mmv(b.w),H0=mmv(b.h);
+      if(p.k==='rail')
+        g+=`<rect x="${X0}" y="${Y0}" width="${W0}" height="${Math.max(H0,3)}" rx="${Math.max(H0,3)/2}" fill="#C9CDD0" stroke="${INK}" stroke-width=".6"/>`;
+      else
+        g+=`<rect x="${X0}" y="${Y0}" width="${W0}" height="${H0}" fill="${p.k==='filler'?'#F8EADB':(isFront?(res.colour||'#FBFBFA'):'#FFFFFF')}" stroke="${INK}" stroke-width=".6"/>`;
+      if(isFront)g+=grainHatch(X0,Y0,W0,H0,grained);
+      if(p.k==='door'||p.k==='drawerfront')g+=handleArt(b,p.k,res.handles,fit.W,X,Y,1);
+    });
+  });
+  return `<svg viewBox="0 0 ${vw} ${vh}" xmlns="http://www.w3.org/2000/svg" width="1024" height="${Math.max(1,Math.round(1024*vh/vw))}" style="background:#F4F2EE">${g}</svg>`;
+}
+/* Rasterize an SVG string to a PNG data URL via an offscreen canvas — the
+   standard browser technique (Image src = data:image/svg+xml, then
+   drawImage). Resolves to null (never rejects) on any failure OR if neither
+   onload nor onerror ever fires within a few seconds, so a broken or stuck
+   reference render degrades to the old text-only prompt instead of leaving
+   "Generate" spinning forever with no way out (§5). */
+function svgToPngDataURL(svg,pxW,pxH){
+  return new Promise(resolve=>{
+    let done=false;
+    const finish=v=>{ if(done)return; done=true; clearTimeout(to); resolve(v); };
+    const to=setTimeout(()=>finish(null),8000);
+    try{
+      const img=new Image();
+      img.onload=()=>{
+        try{
+          const c=document.createElement('canvas'); c.width=pxW; c.height=pxH;
+          const x=c.getContext('2d'); x.fillStyle='#F4F2EE'; x.fillRect(0,0,pxW,pxH);
+          x.drawImage(img,0,0,pxW,pxH);
+          finish(c.toDataURL('image/png'));
+        }catch(e){finish(null);}
+      };
+      img.onerror=()=>finish(null);
+      img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+    }catch(e){finish(null);}
+  });
+}
+function buildImagePrompt(cfg,fit,res,hasReference){
   const kind=((cfg.subject||'').replace(/-/g,' ').trim())||'fitted cabinet';
   const spec=readDrawing(cfg,fit,res);
   return [
-    `Photorealistic straight-on studio product photograph of one built-in ${kind}, square to camera, whole piece in frame, on a seamless pale-grey background with soft even lighting and a faint contact shadow. No people, no props, no text, no dimension lines.`,
+    `Photorealistic straight-on studio product photograph of one built-in ${kind}, square to camera, whole piece centred and entirely in frame with no cropping of the top, sides or plinth, parallel vertical lines with minimal perspective distortion, on a seamless pale-grey background with soft neutral lighting that reads the material colours correctly and a faint contact shadow. No people, no props, no text, no dimension lines.`,
+    hasReference?`The attached reference image is a clean, literal front view of this exact construction — the same section order, the same band layout top to bottom in every section, and the same front/handle positions. Match it exactly; do not treat it as a style reference to reinterpret, and do not copy its flat, undecorated rendering style — render photorealistic materials, lighting and shadow instead.`:'',
     describeDrawing(spec),
     `Render as a clean catalogue photo of the finished piece. Customer illustration — not to scale, not a production drawing.`
-  ].join('\n\n');
+  ].filter(Boolean).join('\n\n');
 }
 
-async function aiRenderImage(prompt,hiQ,W,H){
+async function aiRenderImage(prompt,hiQ,W,H,refPngDataURL){
   if(!AI.has())throw new Error('no-key');
   const size=W>H*1.15?'1536x1024':(H>W*1.15?'1024x1536':'1024x1024');
+  /* with a reference image (the clean front view rendered above), use the
+     image-EDIT endpoint so the model receives the actual layout as a
+     picture, not text alone — /v1/images/generations is text-to-image only
+     and cannot take a reference. Falls back to the old text-only call if
+     rasterizing the reference failed for any reason (svgToPngDataURL never
+     throws, but a very old browser or a canvas-security error still could
+     leave refPngDataURL null) — degrade, don't block the feature. */
+  if(refPngDataURL){
+    const blob=await(await fetch(refPngDataURL)).blob();
+    const form=new FormData();
+    form.append('model',AI.model.image);
+    form.append('prompt',prompt);
+    form.append('size',size);
+    form.append('quality',hiQ?'high':'low');
+    form.append('n','1');
+    form.append('image',blob,'reference.png');
+    const r=await fetch('https://api.openai.com/v1/images/edits',{method:'POST',
+      headers:{Authorization:'Bearer '+AI.getKey()},body:form});
+    const d=await r.json();
+    if(!r.ok)throw new Error((d.error&&d.error.message)||('HTTP '+r.status));
+    return 'data:image/png;base64,'+d.data[0].b64_json;
+  }
   const r=await fetch('https://api.openai.com/v1/images/generations',{method:'POST',
     headers:{'Content-Type':'application/json',Authorization:'Bearer '+AI.getKey()},
     body:JSON.stringify({model:AI.model.image,prompt,size,quality:hiQ?'high':'low',n:1})});
@@ -3904,8 +3988,11 @@ function renderAIView(res,fit,cfg){
   const spec=readDrawing(cfg,fit,res);
   VAN.drawingSpec=spec;
   console.log('%c[VAN] construction-drawing spec → image AI','font-weight:700;color:#1F6FEB',spec);
-  /* STEP 2: prompt from that spec */
-  const prompt=buildImagePrompt(cfg,fit,res);
+  /* STEP 2: prompt from that spec — written assuming a reference image is
+     attached, since the "Generate" handler below always tries to render
+     and send one now (the pure-text prompt alone is not reliable enough
+     for an exact layout — see frontPreviewSVG above). */
+  const prompt=buildImagePrompt(cfg,fit,res,true);
   console.log('%c[VAN] image prompt','font-weight:700;color:#1F6FEB\n',prompt);
   const ck=(aiHiQ?'H|':'L|')+prompt, img=AIIMG[ck], key=AI.has();
   vp.innerHTML=`<div style="padding:16px;display:grid;gap:12px;justify-items:center">
@@ -3934,7 +4021,16 @@ function renderAIView(res,fit,cfg){
   $('aiKeyForget').addEventListener('click',()=>{AI.setKey('');aiErrMsg='';renderAIView(res,fit,cfg);});
   $('aiGo').addEventListener('click',async()=>{
     const b=$('aiGo');b.disabled=true;b.textContent=T('aiWorking');aiErrMsg='';
-    try{ AIIMG[ck]=await aiRenderImage(prompt,aiHiQ,mm(fit.W),mm(fit.H)); }
+    try{
+      /* render the same construction geometry the drawing and schedule are
+         made from into a clean reference PNG, then send it alongside the
+         literal text description — a picture of the actual layout, not
+         text alone (§3, see frontPreviewSVG above). */
+      const refSvg=frontPreviewSVG(res,fit,cfg);
+      const refH=+(refSvg.match(/height="(\d+)"/)||[])[1]||1024;
+      const refPng=await svgToPngDataURL(refSvg,1024,refH);
+      AIIMG[ck]=await aiRenderImage(prompt,aiHiQ,mm(fit.W),mm(fit.H),refPng);
+    }
     catch(err){ aiErrMsg=err.message; }
     if(view==='ai')renderAIView(res,fit,cfg);
   });
