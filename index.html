@@ -359,16 +359,22 @@ tbody td.mute{color:var(--mute);font-size:12.5px;font-family:var(--sans)}
   .mark .r,.mark .s,.save-status{display:none}.project-tools button{padding:7px 8px}.zone-add{grid-template-columns:1fr}.zone-actions{grid-template-columns:1fr}.chip{gap:8px}.chip .lbl{min-width:0}.kunit{grid-template-columns:24px 1fr 86px}.kunit-actions{grid-column:2/4}.kmeasure{grid-template-columns:minmax(130px,1fr) 84px}.kmeasure .kunit-actions{grid-column:1/3}.kdetail-grid,.bath-choices{grid-template-columns:1fr}.needmap-options{grid-template-columns:1fr}.needmap-body{padding:20px 16px}.needmap-actions{padding:14px 16px}}
 @media (max-width:980px){.wplanner{grid-template-columns:1fr}.wp-side{border-left:0;border-top:1px solid var(--hair)}.wp-panel{max-height:none}.wp-canvas{min-height:390px}.wp-help{position:static;margin:0 12px 12px}}
 @media print{.top,.rail,.actions,.vtabs,.dropwrap,.tiles,.or,.catrow,.catlbl{display:none!important}
-  @page{size:A3 landscape;margin:0}
+  @page{size:landscape;margin:0}
   #viewport svg{width:100%!important}
   body{background:#fff}.card{border:none;padding:0}.cols{grid-template-columns:1fr 1fr}}
 #printSheets{display:none}
 @media print{
   body.printing-drawings>header,body.printing-drawings>nav,body.printing-drawings>section{display:none!important}
   body.printing-drawings #printSheets{display:block}
-  #printSheets .pg{width:420mm;height:297mm;page-break-after:always;break-after:page}
+  /* No fixed mm size here on purpose (§6): forcing an absolute A3 box
+     clips on any page that isn't literally A3 (A4, Letter, a printer's
+     own default, "Fit to page" off, …) — the exact bug reported. Each
+     sheet keeps the width:100%;height:auto it already carries inline
+     (drawSheet's own style, identical to the screen), so it always
+     scales to fill whatever page the browser actually prints to. */
+  #printSheets .pg{width:100%;page-break-after:always;break-after:page}
   #printSheets .pg:last-child{page-break-after:auto;break-after:auto}
-  #printSheets svg{display:block;width:420mm;height:297mm}
+  #printSheets svg{display:block;width:100%!important;height:auto!important}
 }
 </style>
 </head>
