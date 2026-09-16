@@ -914,10 +914,98 @@ const STUDIO_UI={
  hy:{tab:'3D ստուդիա',title:'VAN 3D ստուդիա',product:'Կենդանի արտադրական մոդել',add:'Ավելացնել',edit:'Խմբագրել',materials:'Նյութեր',room:'Սենյակ',selectHint:'Սեղմեք ընտրելու համար · քաշեք՝ պտտելու · ոլորեք՝ մոտեցնելու',nothing:'Ընտրեք բաղադրիչ մոդելում',nothingHelp:'Այստեղ կերևան դրա ճշգրիտ չափերը, մշակումը և գործողությունները։',selected:'Ընտրված բաղադրիչ',frame:'Կմախք',shelf:'Դարակ',drawerZone:'Գզրոցների գոտի',doorZone:'Դռների գոտի',rail:'Հագուստի ձող',baseDoor:'Ստորին պահարան',baseDrawers:'Գզրոցային պահարան',tall:'Բարձր պահարան',sink:'Լվացարանի պահարան',oven:'Վառարանի պահարան',addComponents:'Բաղադրիչներ',open:'Բացել ճակատները',close:'Փակել ճակատները',front:'Առջևից',corner:'Անկյունից',xray:'Ռենտգեն',reset:'Վերականգնել տեսքը',move:'Տեղափոխել կահույքը',orbit:'Պտտել տեսարանը',width:'Լայնություն',height:'Բարձրություն',depth:'Խորություն',finish:'Մշակում',material:'Նյութ',colour:'Գույն',white:'Սպիտակ',oak:'Կաղնի',beige:'Բեժ',charcoal:'Մուգ մոխրագույն',laminate:'Լամինատ',veneer:'Շպոն',solid:'Փայտ',matt:'Մատ',satin:'Կիսափայլ',gloss:'Փայլուն',textured:'Հյուսվածքային',applyAll:'Կիրառել ամբողջ կահույքին',remove:'Հեռացնել ընտրված բաղադրիչը',roomSize:'Սենյակի չափերը',wallColour:'Պատի գույն',floor:'Հատակ',naturalOak:'Բնական կաղնի',lightOak:'Բաց կաղնի',greyOak:'Մոխրագույն կաղնի',saved:'Մոդելը թարմացվեց',notAvailable:'Նախ ընտրեք հատված կամ գոտի։',part:'Մաս',section:'Հատված',zone:'Գոտի',module:'Մոդուլ',dimensions:'Չափեր',placement:'Կահույքի դիրքը',leftRight:'Ձախ / աջ',frontBack:'Առաջ / ետ',centre:'Կենտրոնացնել',dragAdd:'Քաշեք բաղադրիչը սենյակ կամ սեղմեք։',keyboard:'Delete՝ հեռացնել · սլաքներ՝ դասավորել · Shift + սլաքներ՝ 10 մմ տեղափոխել',shelfDrag:'Քաշեք ընտրված դարակը վեր կամ վար։'},
  ru:{tab:'3D-студия',title:'VAN 3D Studio',product:'Живая производственная модель',add:'Добавить',edit:'Изменить',materials:'Материалы',room:'Помещение',selectHint:'Нажмите для выбора · тяните для вращения · колесо для масштаба',nothing:'Выберите компонент в модели',nothingHelp:'Здесь появятся его точные размеры, отделка и доступные действия.',selected:'Выбранный компонент',frame:'Каркас',shelf:'Полка',drawerZone:'Зона ящиков',doorZone:'Зона дверей',rail:'Штанга',baseDoor:'Нижний шкаф',baseDrawers:'Шкаф с ящиками',tall:'Высокий шкаф',sink:'Шкаф под мойку',oven:'Шкаф под духовку',addComponents:'Компоненты',open:'Открыть фасады',close:'Закрыть фасады',front:'Спереди',corner:'Под углом',xray:'Рентген',reset:'Сбросить вид',move:'Перемещать мебель',orbit:'Вращать вид',width:'Ширина',height:'Высота',depth:'Глубина',finish:'Отделка',material:'Материал',colour:'Цвет',white:'Белый',oak:'Дуб',beige:'Бежевый',charcoal:'Тёмно-серый',laminate:'Ламинат',veneer:'Шпон',solid:'Массив',matt:'Матовая',satin:'Полуматовая',gloss:'Глянцевая',textured:'Текстурная',applyAll:'Применить ко всей мебели',remove:'Удалить выбранный компонент',roomSize:'Размеры помещения',wallColour:'Цвет стены',floor:'Пол',naturalOak:'Натуральный дуб',lightOak:'Светлый дуб',greyOak:'Серый дуб',saved:'Модель обновлена',notAvailable:'Сначала выберите секцию или зону.',part:'Деталь',section:'Секция',zone:'Зона',module:'Модуль',dimensions:'Размеры',placement:'Положение мебели',leftRight:'Влево / вправо',frontBack:'Вперёд / назад',centre:'Поставить по центру',dragAdd:'Перетащите компонент в комнату или нажмите.',keyboard:'Delete — удалить · стрелки — переставить · Shift + стрелки — сдвиг на 10 мм',shelfDrag:'Тяните выбранную полку вверх или вниз.'}
 };
+/* wardrobe room planner — reported directly: this whole screen was never
+   localized (§8). One more small dictionary, same pattern as PARAM_UI and
+   STUDIO_UI above, so it stays a self-contained addition to renderWardrobePlanner()
+   and wardrobePlannerSVG() rather than a few hundred lines spliced into I18N. */
+const WP_UI={
+ en:{tabRoom:'Room',tabFrames:'Frames',tabInterior:'Interior',tabFronts:'Fronts',tabFinish:'Finish',
+  roomTitle:'Adapt the room',roomHelp:'Set the real room before placing frames. Add doors, windows and radiators so collisions are caught before production.',
+  wallWidth:'Wall width',roomDepth:'Room depth',ceilingHeight:'Ceiling height',skirting:'Skirting board',height:'Height',depth:'Depth',
+  roomElements:'Room elements',elDoor:'Door',elWindow:'Window',elRadiator:'Radiator',addToWall:'Add to a wall',
+  selectedElement:'Selected room element',wall:'Wall',wallBack:'Back wall',wallRight:'Right wall',
+  position:'Position',width:'Width',heightFromFloor:'Height from floor',elementHeight:'Element height',
+  framesTitle:'Frames and corner parts',framesHelp:'Add from the catalogue, select a frame in the room, then move, resize, duplicate or remove it.',
+  selectedWall:'Selected wall',selectedWidth:'Selected width',selectedDepth:'Selected depth',selectedHeight:'Selected height',
+  insertMenu:'Insert from side menu',placeNewFrame:'Place new frame',newDepth:'New depth',newHeight:'New height',
+  prodFrame:'Frame',prodCorner:'Corner unit',prodMid:'Mid add-on',prodEnd:'End shelf',wideSuffix:'mm wide',
+  placedComponents:'Placed components',kindCorner:'Corner',kindMid:'Mid add-on',kindEnd:'End shelf',kindFrame:'Frame',
+  deepSuffix:'deep',moveLeft:'Move left on this wall',moveRight:'Move right on this wall',dup:'Duplicate',del:'Delete',
+  interiorTitle:'Interior fittings',interiorHelp:'Choose the inside of the selected {n} mm frame. Shelves, drawers and rails are included in the construction model.',
+  intHanging:'Hanging rail',intShelves:'Shelves',intDrawers:'Drawers',intMixed:'Mixed storage',
+  fineAdjust:'Fine adjustment',numShelves:'Number of shelves',pcs:'pcs',numDrawers:'Number of drawers',ledLight:'Integrated LED light',
+  frontsTitle:'Doors and handles',frontsHelp:'Fronts are independent of the interior and update live in the room view and production schedule.',
+  frontOpen:'Open wardrobe',frontHinged:'Hinged doors',frontSliding:'Sliding front',frontPanels:'Front panels',
+  handle:'Handle',handleNone:'Push to open',handleGrooved:'Finger groove',handleBar:'Bar handle',handleKnob:'Knob',
+  finishTitle:'Live colours',finishHelp:'Change carcass and front colours independently. Wall and floor colours help judge the whole room.',
+  frameColour:'Frame colour',frontColour:'Front colour',roomColours:'Room colours',walls:'Walls',floor:'Floor',
+  alertBackShort:'Back wall is {n} mm too short.',alertRightShort:'Right wall is {n} mm too short.',
+  alertClearance:'Only {n} mm remains above the frames; allow assembly clearance.',
+  alertCollision:'{n} frame/room-element collision{s} must be resolved.',
+  alertFits:'Fits the room: {a} mm free on the back wall and {b} mm on the right wall.',
+  plannerTitle:'VAN Room Planner',viewRoom:'Room',viewFront:'Front',viewPlan:'Plan',
+  helpLine:'Click a component to edit it · all changes update the production model',
+  svgTopPlan:'TOP PLAN',svgUnrolled:'UNROLLED FRONT',svgRoomLabel:'Wardrobe room',svgPlanLabel:'Wardrobe plan',svgFrontLabel:'Wardrobe front'},
+ hy:{tabRoom:'Սենյակ',tabFrames:'Կմախքներ',tabInterior:'Ներսը',tabFronts:'Ճակատներ',tabFinish:'Ձևավորում',
+  roomTitle:'Հարմարեցրեք սենյակը',roomHelp:'Նախքան կմախքներ տեղադրելը սահմանեք իրական սենյակը։ Ավելացրեք դռներ, պատուհաններ և ջեռուցիչներ, որպեսզի բախումները հայտնաբերվեն արտադրությունից առաջ։',
+  wallWidth:'Պատի լայնություն',roomDepth:'Սենյակի խորություն',ceilingHeight:'Առաստաղի բարձրություն',skirting:'Հատակամած',height:'Բարձրություն',depth:'Խորություն',
+  roomElements:'Սենյակի տարրեր',elDoor:'Դուռ',elWindow:'Պատուհան',elRadiator:'Ջեռուցիչ',addToWall:'Ավելացնել պատին',
+  selectedElement:'Ընտրված տարրը',wall:'Պատ',wallBack:'Հետևի պատ',wallRight:'Աջ պատ',
+  position:'Դիրք',width:'Լայնություն',heightFromFloor:'Բարձրությունը հատակից',elementHeight:'Տարրի բարձրություն',
+  framesTitle:'Կմախքներ և անկյունային մասեր',framesHelp:'Ավելացրեք կատալոգից, ընտրեք կմախք սենյակում, ապա տեղափոխեք, փոխեք չափը, կրկնօրինակեք կամ հեռացրեք։',
+  selectedWall:'Ընտրված պատ',selectedWidth:'Ընտրված լայնություն',selectedDepth:'Ընտրված խորություն',selectedHeight:'Ընտրված բարձրություն',
+  insertMenu:'Ավելացնել կողային ցանկից',placeNewFrame:'Տեղադրել նոր կմախք',newDepth:'Նոր խորություն',newHeight:'Նոր բարձրություն',
+  prodFrame:'Կմախք',prodCorner:'Անկյունային մոդուլ',prodMid:'Միջանկյալ հավելում',prodEnd:'Ծայրի դարակ',wideSuffix:'մմ լայն',
+  placedComponents:'Տեղադրված մասեր',kindCorner:'Անկյուն',kindMid:'Միջանկյալ հավելում',kindEnd:'Ծայրի դարակ',kindFrame:'Կմախք',
+  deepSuffix:'խորը',moveLeft:'Տեղափոխել ձախ այս պատին',moveRight:'Տեղափոխել աջ այս պատին',dup:'Կրկնօրինակել',del:'Ջնջել',
+  interiorTitle:'Ներքին կահավորանք',interiorHelp:'Ընտրեք {n} մմ կմախքի ներսը։ Դարակներ, գզրոցներ և ձողեր ընդգրկված են արտադրական մոդելում։',
+  intHanging:'Կախիչ ձող',intShelves:'Դարակներ',intDrawers:'Գզրոցներ',intMixed:'Խառը պահեստավորում',
+  fineAdjust:'Ճշգրիտ կարգավորում',numShelves:'Դարակների քանակ',pcs:'հատ',numDrawers:'Գզրոցների քանակ',ledLight:'Ներկառուցված LED լուսավորություն',
+  frontsTitle:'Դռներ և բռնակներ',frontsHelp:'Ճակատները անկախ են ներսից և թարմացվում են ուղիղ ռեժիմով սենյակի տեսքում և արտադրական ցուցակում։',
+  frontOpen:'Բաց պահարան',frontHinged:'Բացվող դռներ',frontSliding:'Սահող ճակատ',frontPanels:'Ճակատային վահանակներ',
+  handle:'Բռնակ',handleNone:'Հրել՝ բացելու համար',handleGrooved:'Մատի ակոս',handleBar:'Գծային բռնակ',handleKnob:'Կոճակ',
+  finishTitle:'Կենդանի գույներ',finishHelp:'Փոխեք կորպուսի և ճակատի գույները անկախ։ Պատի և հատակի գույները օգնում են գնահատել ամբողջ սենյակը։',
+  frameColour:'Կմախքի գույն',frontColour:'Ճակատի գույն',roomColours:'Սենյակի գույներ',walls:'Պատեր',floor:'Հատակ',
+  alertBackShort:'Հետևի պատը {n} մմ կարճ է։',alertRightShort:'Աջ պատը {n} մմ կարճ է։',
+  alertClearance:'Կմախքներից վեր մնում է ընդամենը {n} մմ. թողեք մոնտաժային տարածք։',
+  alertCollision:'Պետք է լուծել {n} կմախք/սենյակի տարրի բախում{s}։',
+  alertFits:'Տեղավորվում է սենյակում՝ {a} մմ ազատ տարածք հետևի պատին և {b} մմ աջ պատին։',
+  plannerTitle:'VAN Սենյակի պլանավորիչ',viewRoom:'Սենյակ',viewFront:'Ճակատ',viewPlan:'Հատակագիծ',
+  helpLine:'Սեղմեք մասի վրա՝ խմբագրելու համար · բոլոր փոփոխությունները թարմացնում են արտադրական մոդելը',
+  svgTopPlan:'ՀԱՏԱԿԱԳԻԾ',svgUnrolled:'ԾԱՎԱԼՎԱԾ ՃԱԿԱՏ',svgRoomLabel:'Պահարանի սենյակ',svgPlanLabel:'Պահարանի հատակագիծ',svgFrontLabel:'Պահարանի ճակատ'},
+ ru:{tabRoom:'Помещение',tabFrames:'Каркасы',tabInterior:'Интерьер',tabFronts:'Фасады',tabFinish:'Отделка',
+  roomTitle:'Настройте помещение',roomHelp:'Задайте реальное помещение перед размещением каркасов. Добавьте двери, окна и радиаторы, чтобы конфликты были выявлены до производства.',
+  wallWidth:'Ширина стены',roomDepth:'Глубина помещения',ceilingHeight:'Высота потолка',skirting:'Плинтус',height:'Высота',depth:'Глубина',
+  roomElements:'Элементы помещения',elDoor:'Дверь',elWindow:'Окно',elRadiator:'Радиатор',addToWall:'Добавить на стену',
+  selectedElement:'Выбранный элемент помещения',wall:'Стена',wallBack:'Задняя стена',wallRight:'Правая стена',
+  position:'Положение',width:'Ширина',heightFromFloor:'Высота от пола',elementHeight:'Высота элемента',
+  framesTitle:'Каркасы и угловые модули',framesHelp:'Добавьте из каталога, выберите каркас в помещении, затем переместите, измените размер, дублируйте или удалите.',
+  selectedWall:'Выбранная стена',selectedWidth:'Выбранная ширина',selectedDepth:'Выбранная глубина',selectedHeight:'Выбранная высота',
+  insertMenu:'Добавить из бокового меню',placeNewFrame:'Разместить новый каркас',newDepth:'Новая глубина',newHeight:'Новая высота',
+  prodFrame:'Каркас',prodCorner:'Угловой модуль',prodMid:'Средняя вставка',prodEnd:'Концевая полка',wideSuffix:'мм шириной',
+  placedComponents:'Размещённые компоненты',kindCorner:'Угловой',kindMid:'Средняя вставка',kindEnd:'Концевая полка',kindFrame:'Каркас',
+  deepSuffix:'глубиной',moveLeft:'Сдвинуть влево по этой стене',moveRight:'Сдвинуть вправо по этой стене',dup:'Дублировать',del:'Удалить',
+  interiorTitle:'Внутреннее наполнение',interiorHelp:'Выберите наполнение выбранного каркаса {n} мм. Полки, ящики и штанги включены в производственную модель.',
+  intHanging:'Штанга для одежды',intShelves:'Полки',intDrawers:'Ящики',intMixed:'Смешанное хранение',
+  fineAdjust:'Точная настройка',numShelves:'Количество полок',pcs:'шт',numDrawers:'Количество ящиков',ledLight:'Встроенная LED-подсветка',
+  frontsTitle:'Двери и ручки',frontsHelp:'Фасады не зависят от наполнения и обновляются сразу в виде помещения и в производственной спецификации.',
+  frontOpen:'Открытый шкаф',frontHinged:'Распашные двери',frontSliding:'Раздвижной фасад',frontPanels:'Фасадные панели',
+  handle:'Ручка',handleNone:'Открывание нажатием',handleGrooved:'Профильная ручка',handleBar:'Ручка-рейлинг',handleKnob:'Кнопка',
+  finishTitle:'Живые цвета',finishHelp:'Меняйте цвет корпуса и фасадов независимо. Цвета стен и пола помогают оценить всё помещение.',
+  frameColour:'Цвет каркаса',frontColour:'Цвет фасада',roomColours:'Цвета помещения',walls:'Стены',floor:'Пол',
+  alertBackShort:'Задняя стена короче на {n} мм.',alertRightShort:'Правая стена короче на {n} мм.',
+  alertClearance:'Над каркасами остаётся всего {n} мм; оставьте монтажный зазор.',
+  alertCollision:'Необходимо устранить {n} конфликт(ов) каркаса с элементами помещения.',
+  alertFits:'Помещается: {a} мм свободно у задней стены и {b} мм у правой стены.',
+  plannerTitle:'VAN Планировщик комнаты',viewRoom:'Комната',viewFront:'Фасад',viewPlan:'План',
+  helpLine:'Нажмите на компонент, чтобы изменить его · все изменения обновляют производственную модель',
+  svgTopPlan:'ПЛАН СВЕРХУ',svgUnrolled:'РАЗВЁРНУТЫЙ ФАСАД',svgRoomLabel:'Комната со шкафом',svgPlanLabel:'План шкафа',svgFrontLabel:'Фасад шкафа'}
+};
 let L='en';
 const T=k=>I18N[L][k];
 const fmt=(k,p)=>{let s=T(k);for(const q in p)s=s.split('{'+q+'}').join(p[q]);return s;};
 const PU=k=>(PARAM_UI[L]||PARAM_UI.en)[k]||PARAM_UI.en[k]||k;
+const WU=(k,p)=>{let s=(WP_UI[L]||WP_UI.en)[k]||WP_UI.en[k]||k;for(const q in p)s=s.split('{'+q+'}').join(p[q]);return s;};
 const SU=k=>(STUDIO_UI[L]||STUDIO_UI.en)[k]||STUDIO_UI.en[k]||k;
 
 /* ── core: integer tenths of a millimetre, everywhere ── */
@@ -3371,7 +3459,15 @@ function studioMoveSelection(key,res,c){
   }
   return false;
 }
-function studioNudgePlacement(dx,dz,c,label){const p=studioEnsure(c).placement;mark(label||SU('move'));p.x=Math.round((p.x||0)+dx);p.z=Math.round((p.z||0)+dz);renderFinal();}
+function studioNudgePlacement(dx,dz,c,label,fit){const p=studioEnsure(c).placement;mark(label||SU('move'));
+  /* same floor-footprint bound the mouse drag enforces (see mountStudio) —
+     otherwise repeated keyboard nudges walk the piece off the room's floor
+     exactly the way an unbounded mouse drag used to. */
+  const rawRoom=c.wardrobePlanner&&c.wardrobePlanner.room,W=fit?mmv(fit.W):0,D=fit?mmv(fit.D):0,
+    roomW=rawRoom?mmv(rawRoom.w):Math.max(W+1600,4200),roomD=rawRoom?mmv(rawRoom.d):Math.max(D+2200,3200),
+    boundX=Math.max(0,roomW/2-W/2-40),boundZ=Math.max(0,roomD/2-D/2-40);
+  p.x=Math.max(-boundX,Math.min(boundX,Math.round((p.x||0)+dx)));
+  p.z=Math.max(-boundZ,Math.min(boundZ,Math.round((p.z||0)+dz)));renderFinal();}
 function studioFloorTexture(kind){
   const T3=THREE,c=document.createElement('canvas');c.width=c.height=1024;const x=c.getContext('2d'),base=kind==='grey'?'#77736C':kind==='light'?'#D2B98D':'#B88952',line=kind==='grey'?'rgba(35,32,30,.24)':'rgba(84,50,20,.24)';x.fillStyle=base;x.fillRect(0,0,1024,1024);
   x.strokeStyle=line;x.lineWidth=5;const L=128;for(let row=-2;row<12;row++)for(let col=-2;col<12;col++){const ox=col*L+((row&1)?L/2:0),oy=row*L/2;x.save();x.translate(ox,oy);x.rotate((col+row)&1?Math.PI/4:-Math.PI/4);x.strokeRect(-L*.48,-L*.13,L*.96,L*.26);x.restore();}
@@ -3406,9 +3502,24 @@ function mountStudio(res,fit,cfg){
   loadThree().then(()=>{
     if(token!==GLTOKEN)return;const T3=THREE,stage=$('studioStage'),w=stage.clientWidth||900,h=stage.clientHeight||650,scene=new T3.Scene(),renderer=new T3.WebGLRenderer({antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(w,h);renderer.shadowMap.enabled=true;renderer.shadowMap.type=T3.PCFSoftShadowMap;if(T3.sRGBEncoding)renderer.outputEncoding=T3.sRGBEncoding;renderer.toneMapping=T3.ACESFilmicToneMapping;renderer.toneMappingExposure=.68;stage.appendChild(renderer.domElement);
     const W=mmv(fit.W),H=mmv(fit.H),D=mmv(fit.D),rawRoom=cfg.wardrobePlanner&&cfg.wardrobePlanner.room,roomW=S.room.width||rawRoom&&mmv(rawRoom.w)||Math.max(W+1600,4200),roomD=S.room.depth||rawRoom&&mmv(rawRoom.d)||Math.max(D+2200,3200),roomH=S.room.height||rawRoom&&mmv(rawRoom.h)||Math.max(H+450,2700),backZ=D/2+140,floorZ=backZ-roomD/2,pos=S.placement;
-    scene.environment=studioEnv(renderer);scene.background=new T3.Color(0xBBC0C5);const model=buildScene(res,fit,cfg,{open:REAL_OPEN,glass:cfg.frontStyle==='glazed',lit:(res.lights||0)>0});model.position.x+=pos.x||0;model.position.z+=pos.z||0;studioDecorate(model,res,cfg);model.traverse(o=>{if(!o.isMesh)return;const ms=Array.isArray(o.material)?o.material:[o.material];ms.filter(Boolean).forEach(m=>{if('envMapIntensity'in m)m.envMapIntensity=(m.metalness||0)>.45?.85:.24;});});scene.add(model);stage.dataset.selectables=String((model.userData.selectables||[]).length);
+    scene.environment=studioEnv(renderer);scene.background=new T3.Color(0xBBC0C5);const model=buildScene(res,fit,cfg,{open:REAL_OPEN,glass:cfg.frontStyle==='glazed',lit:(res.lights||0)>0});model.position.x+=pos.x||0;model.position.z+=pos.z||0;
+    /* a "move furniture" drag must never be able to push the piece past the
+       room's own floor — the floor plane is generous now (see below), but
+       the piece should still read as standing IN the room, not drifting off
+       into empty space where nothing grounds it visually. */
+    const studioBaseX=model.position.x-(pos.x||0),studioBaseZ=model.position.z-(pos.z||0),
+      studioBoundX=Math.max(0,roomW/2-W/2-40),studioBoundZ=Math.max(0,roomD/2-D/2-40);
+    studioDecorate(model,res,cfg);model.traverse(o=>{if(!o.isMesh)return;const ms=Array.isArray(o.material)?o.material:[o.material];ms.filter(Boolean).forEach(m=>{if('envMapIntensity'in m)m.envMapIntensity=(m.metalness||0)>.45?.85:.24;});});scene.add(model);stage.dataset.selectables=String((model.userData.selectables||[]).length);
     if(STUDIO_STATE.xray)model.traverse(o=>{if(!o.isMesh||o.userData.van)return;if(Array.isArray(o.material))o.material=o.material.map(m=>m.clone());else o.material=o.material.clone();const ms=Array.isArray(o.material)?o.material:[o.material];ms.forEach(m=>{m.transparent=true;m.opacity=.24;m.depthWrite=false;});});
-    const floor=new T3.Mesh(new T3.PlaneGeometry(roomW,roomD),new T3.MeshStandardMaterial({color:0xFFFFFF,map:studioFloorTexture(S.room.floor),roughness:.64,metalness:0}));floor.rotation.x=-Math.PI/2;floor.position.set(0,-H/2-.5,floorZ);floor.receiveShadow=true;scene.add(floor);
+    /* the floor plane must outlast anywhere the piece can actually be
+       dragged to — sized to the room like mountStudio always did, it ran out
+       under the furniture as soon as a "move furniture" drag (or a stale
+       S.placement carried over from a larger room) pushed it past the
+       room's own footprint, and past the edge of a finite PlaneGeometry
+       there is no floor at all: the piece read as sunk through it. Sized
+       generously and fixed, the way mountRealistic's own floor already is,
+       so dragging can never outrun it. */
+    const floor=new T3.Mesh(new T3.PlaneGeometry(Math.max(roomW,30000),Math.max(roomD,30000)),new T3.MeshStandardMaterial({color:0xFFFFFF,map:studioFloorTexture(S.room.floor),roughness:.64,metalness:0}));floor.rotation.x=-Math.PI/2;floor.position.set(0,-H/2-.5,floorZ);floor.receiveShadow=true;scene.add(floor);
     const wallMat=new T3.MeshStandardMaterial({color:new T3.Color(S.room.wall||'#D7D4CE'),roughness:.92,side:T3.FrontSide}),back=new T3.Mesh(new T3.PlaneGeometry(roomW,roomH),wallMat),left=new T3.Mesh(new T3.PlaneGeometry(roomD,roomH),wallMat),right=new T3.Mesh(new T3.PlaneGeometry(roomD,roomH),wallMat);back.position.set(0,-H/2+roomH/2,backZ);back.rotation.y=Math.PI;left.position.set(-roomW/2,-H/2+roomH/2,floorZ);left.rotation.y=Math.PI/2;right.position.set(roomW/2,-H/2+roomH/2,floorZ);right.rotation.y=-Math.PI/2;back.receiveShadow=left.receiveShadow=right.receiveShadow=true;scene.add(back,left,right);
     const baseMat=new T3.MeshStandardMaterial({color:0xF4F2EE,roughness:.75});panel(scene,baseMat,{x:-roomW/2,y:-H/2,z:backZ-18,w:roomW,h:82,d:18},1);panel(scene,baseMat,{x:-roomW/2,y:-H/2,z:backZ-roomD,w:18,h:82,d:roomD},1);panel(scene,baseMat,{x:roomW/2-18,y:-H/2,z:backZ-roomD,w:18,h:82,d:roomD},1);
     const key=new T3.DirectionalLight(0xfff1df,.82);key.position.set(-roomW*.28,roomH*.9,backZ-roomD*.35);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-roomW*.7;key.shadow.camera.right=roomW*.7;key.shadow.camera.top=roomH;key.shadow.camera.bottom=-roomH;key.shadow.camera.near=100;key.shadow.camera.far=roomW+roomD+roomH;key.shadow.bias=-.00015;const fill=new T3.DirectionalLight(0xcbd8ec,.16);fill.position.set(roomW*.4,roomH*.45,backZ-roomD*.7);scene.add(key,fill,new T3.HemisphereLight(0xe4e9ef,0x55483b,.25));
@@ -3417,12 +3528,12 @@ function mountStudio(res,fit,cfg){
     const projectedPick=(lx,ly)=>{scene.updateMatrixWorld(true);cam.updateMatrixWorld(true);let best=null,score=Infinity;for(const o of (model.userData.selectables||[])){const p=o.getWorldPosition(new T3.Vector3()).project(cam);if(p.z<-1||p.z>1)continue;const sx=(p.x+1)*w/2,sy=(1-p.y)*h/2,d2=(sx-lx)**2+(sy-ly)**2;if(d2<score){score=d2;best=o;}}return best&&score<Math.pow(Math.max(80,Math.min(w,h)*.22),2)?{object:best}:null;};
     const selectAt=(x,y)=>{const box=renderer.domElement.getBoundingClientRect(),lx=x-box.left,ly=y-box.top;mouse.x=lx/box.width*2-1;mouse.y=-ly/box.height*2+1;ray.setFromCamera(mouse,cam);const hit=ray.intersectObjects(model.userData.selectables||[],false)[0]||projectedPick(lx,ly);stage.dataset.lastPointer=Math.round(lx)+','+Math.round(ly);stage.dataset.lastPick=hit?hit.object.userData.van.key:'none';if(outline){scene.remove(outline);outline=null;}selectedHit=hit&&hit.object;if(hit){STUDIO_SEL={...hit.object.userData.van,box:{x:hit.object.position.x-hit.object.geometry.parameters.width/2,y:hit.object.position.y-hit.object.geometry.parameters.height/2,z:hit.object.position.z-hit.object.geometry.parameters.depth/2,w:hit.object.geometry.parameters.width,h:hit.object.geometry.parameters.height,d:hit.object.geometry.parameters.depth}};STUDIO_TAB='edit';outline=new T3.BoxHelper(hit.object,0x0563C1);scene.add(outline);}else STUDIO_SEL=null;$('studioSide').innerHTML=studioPanelHTML(res,fit,cfg);wireStudioPanel(res,fit,cfg);stage.focus();};
     stage.addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('button'))return;drag=true;moved=0;historyStarted=false;px=e.clientX;py=e.clientY;startY=e.clientY;dragMode=st.move?'furniture':(STUDIO_SEL&&STUDIO_SEL.k==='shelf'&&Number.isInteger(STUDIO_SEL.shelfIndex)?'shelf':'orbit');dragCtx=null;if(dragMode==='shelf'){const t=studioTarget(res,cfg);if(t&&t.kind==='zone'){const p=studioShelfPositions(t.object),i=Math.min(p.length-1,STUDIO_SEL.shelfIndex),visuals=[];model.traverse(o=>{if(o.userData&&o.userData.vanKey===STUDIO_SEL.key)visuals.push({o,y:o.position.y});});dragCtx={t,p,i,base:p[i],visuals,hitY:selectedHit&&selectedHit.position.y};}else dragMode='orbit';}stage.classList.add('drag');try{stage.setPointerCapture(e.pointerId);}catch(_){}});
-    stage.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;moved+=Math.abs(dx)+Math.abs(dy);if(moved>4){if(dragMode==='furniture'){if(!historyStarted){mark(SU('move'));historyStarted=true;}const k=Math.max(W,H)/Math.max(650,h)*.8;S.placement.x=Math.round((S.placement.x||0)+dx*k);S.placement.z=Math.round((S.placement.z||0)-dy*k);model.position.x+=dx*k;model.position.z-=dy*k;target.set(S.placement.x,0,S.placement.z);place();}else if(dragMode==='shelf'&&dragCtx){if(!historyStarted){mark(T('sizeEdit'));historyStarted=true;}const zoneH=Math.max(60,mmv(dragCtx.t.object._h||mm(600))),lo=dragCtx.i?dragCtx.p[dragCtx.i-1]+.025:.035,hi=dragCtx.i<dragCtx.p.length-1?dragCtx.p[dragCtx.i+1]-.025:.965,nr=Math.max(lo,Math.min(hi,dragCtx.base+(e.clientY-startY)/(h*.72))),delta=(nr-dragCtx.base)*zoneH;dragCtx.p[dragCtx.i]=nr;dragCtx.t.object.shelfPositions=dragCtx.p;dragCtx.visuals.forEach(v=>v.o.position.y=v.y+delta);if(selectedHit)selectedHit.position.y=dragCtx.hitY+delta;if(outline)outline.update();}else{st.az-=dx*.007;st.el=Math.max(-1.2,Math.min(1.35,st.el+dy*.005));place();}}px=e.clientX;py=e.clientY;});
+    stage.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-px,dy=e.clientY-py;moved+=Math.abs(dx)+Math.abs(dy);if(moved>4){if(dragMode==='furniture'){if(!historyStarted){mark(SU('move'));historyStarted=true;}const k=Math.max(W,H)/Math.max(650,h)*.8;S.placement.x=Math.max(-studioBoundX,Math.min(studioBoundX,Math.round((S.placement.x||0)+dx*k)));S.placement.z=Math.max(-studioBoundZ,Math.min(studioBoundZ,Math.round((S.placement.z||0)-dy*k)));model.position.x=studioBaseX+S.placement.x;model.position.z=studioBaseZ+S.placement.z;target.set(S.placement.x,0,S.placement.z);place();}else if(dragMode==='shelf'&&dragCtx){if(!historyStarted){mark(T('sizeEdit'));historyStarted=true;}const zoneH=Math.max(60,mmv(dragCtx.t.object._h||mm(600))),lo=dragCtx.i?dragCtx.p[dragCtx.i-1]+.025:.035,hi=dragCtx.i<dragCtx.p.length-1?dragCtx.p[dragCtx.i+1]-.025:.965,nr=Math.max(lo,Math.min(hi,dragCtx.base+(e.clientY-startY)/(h*.72))),delta=(nr-dragCtx.base)*zoneH;dragCtx.p[dragCtx.i]=nr;dragCtx.t.object.shelfPositions=dragCtx.p;dragCtx.visuals.forEach(v=>v.o.position.y=v.y+delta);if(selectedHit)selectedHit.position.y=dragCtx.hitY+delta;if(outline)outline.update();}else{st.az-=dx*.007;st.el=Math.max(-1.2,Math.min(1.35,st.el+dy*.005));place();}}px=e.clientX;py=e.clientY;});
     const endDrag=e=>{if(!drag)return;const changed=moved>4&&(dragMode==='furniture'||dragMode==='shelf');if(moved<=4&&e)selectAt(e.clientX,e.clientY);drag=false;stage.classList.remove('drag');if(changed){STUDIO_SEL=null;renderFinal();}};stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',()=>endDrag(null));stage.addEventListener('wheel',e=>{e.preventDefault();st.dist=Math.max(W*.65,Math.min(Math.max(roomW,roomD)*4,st.dist*(1+Math.sign(e.deltaY)*.1)));place();},{passive:false});
     stage.addEventListener('dragover',e=>{if(e.dataTransfer&&e.dataTransfer.types.includes('text/x-van-component')){e.preventDefault();e.dataTransfer.dropEffect='copy';stage.classList.add('drop');}});stage.addEventListener('dragleave',()=>stage.classList.remove('drop'));stage.addEventListener('drop',e=>{e.preventDefault();stage.classList.remove('drop');const kind=e.dataTransfer.getData('text/x-van-component');if(kind)studioAdd(kind,res,fit,cfg);});
     stage.querySelectorAll('[data-st-camera]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.stCamera==='front'){st.az=-Math.PI;st.el=0;}else{st.az=-Math.PI+.58;st.el=.16;}place();}));
     stage.querySelector('[data-st-reset]').addEventListener('click',()=>{st.az=Math.PI-.58;st.el=.16;st.dist=Math.max(W,H)*2.45;place();});stage.querySelector('[data-st-move]').addEventListener('click',e=>{st.move=!st.move;stage.classList.toggle('move',st.move);e.currentTarget.textContent=st.move?SU('orbit'):SU('move');e.currentTarget.setAttribute('aria-pressed',String(st.move));});stage.querySelector('[data-st-open]').addEventListener('click',e=>{REAL_OPEN=!REAL_OPEN;e.currentTarget.textContent=REAL_OPEN?SU('close'):SU('open');e.currentTarget.setAttribute('aria-pressed',String(REAL_OPEN));model.userData.setOpen(REAL_OPEN);});stage.querySelector('[data-st-xray]').addEventListener('click',()=>{STUDIO_STATE.xray=!STUDIO_STATE.xray;mountStudio(res,fit,cfg);});
-    if(STUDIO_KEY)document.removeEventListener('keydown',STUDIO_KEY);STUDIO_KEY=e=>{if(!document.getElementById('studioStage')||/INPUT|SELECT|TEXTAREA/.test((e.target&&e.target.tagName)||''))return;if((e.key==='Delete'||e.key==='Backspace')&&STUDIO_SEL){e.preventDefault();studioRemove(res,cfg);return;}if(e.shiftKey&&e.key.startsWith('Arrow')){e.preventDefault();studioNudgePlacement(e.key==='ArrowLeft'?-10:e.key==='ArrowRight'?10:0,e.key==='ArrowUp'?10:e.key==='ArrowDown'?-10:0,cfg);return;}if(e.key.startsWith('Arrow')&&studioMoveSelection(e.key,res,cfg))e.preventDefault();};document.addEventListener('keydown',STUDIO_KEY);
+    if(STUDIO_KEY)document.removeEventListener('keydown',STUDIO_KEY);STUDIO_KEY=e=>{if(!document.getElementById('studioStage')||/INPUT|SELECT|TEXTAREA/.test((e.target&&e.target.tagName)||''))return;if((e.key==='Delete'||e.key==='Backspace')&&STUDIO_SEL){e.preventDefault();studioRemove(res,cfg);return;}if(e.shiftKey&&e.key.startsWith('Arrow')){e.preventDefault();studioNudgePlacement(e.key==='ArrowLeft'?-10:e.key==='ArrowRight'?10:0,e.key==='ArrowUp'?10:e.key==='ArrowDown'?-10:0,cfg,null,fit);return;}if(e.key.startsWith('Arrow')&&studioMoveSelection(e.key,res,cfg))e.preventDefault();};document.addEventListener('keydown',STUDIO_KEY);
     const loop=()=>{if(!GL)return;GL.raf=requestAnimationFrame(loop);renderer.render(scene,cam);};GL={renderer,scene,cam,model,raf:0,setOpen:open=>model.userData.setOpen(open)};loop();studioFlash();
   }).catch(()=>{if(token===GLTOKEN)host.innerHTML=`<div class="studio-empty">${T('glFail')}</div>`;});
 }
@@ -4907,7 +5018,18 @@ function wardrobePlannerSVG(p){
     if(f.light)z+=`<line x1="${x+5}" y1="${y+8}" x2="${x+w-5}" y2="${y+8}" stroke="#ffcc57" stroke-width="5" opacity=".85"/>`;
     if(f.front&&f.front!=='none'){const fc=p.frontColor||p.frameColor;z+=`<rect x="${x+2}" y="${y+2}" width="${Math.max(1,w-4)}" height="${Math.max(1,h-4)}" fill="${esc(fc)}" opacity=".82" stroke="#4f5357"/>`;
       const n=Math.max(1,Math.min(8,+f.frontCount||1));for(let i=1;i<n;i++)z+=`<line x1="${x+w*i/n}" y1="${y+2}" x2="${x+w*i/n}" y2="${y+h-2}" stroke="#666"/>`;
-      if(f.handle!=='none')z+=`<line x1="${x+w*.82}" y1="${y+h*.42}" x2="${x+w*.82}" y2="${y+h*.58}" stroke="#222" stroke-width="2"/>`;}
+      /* each front gets its own handle mark, on its own outer edge (mirrored
+         about the centre), and the mark's SHAPE actually differs by type —
+         it used to be the exact same vertical tick for bar, knob and
+         grooved alike, so switching handle style in the Fronts tab visibly
+         changed nothing (reported directly: "choosing a handle doesn't
+         change anything on the door"). */
+      if(f.handle&&f.handle!=='none')for(let i=0;i<n;i++){
+        const fx0=x+w*i/n,fx1=x+w*(i+1)/n,outer=i<n/2?fx0+w/n*.14:fx1-w/n*.14;
+        if(f.handle==='bar')z+=`<line x1="${outer}" y1="${y+h*.4}" x2="${outer}" y2="${y+h*.6}" stroke="#222" stroke-width="2.4"/>`;
+        else if(f.handle==='knob')z+=`<circle cx="${outer}" cy="${y+h*.5}" r="3.4" fill="#222"/>`;
+        else if(f.handle==='grooved')z+=`<line x1="${fx0+2}" y1="${y+h*.06}" x2="${fx1-2}" y2="${y+h*.06}" stroke="#222" stroke-width="3"/>`;
+      }}
     return z;
   };
   const label=(f,i)=>`${i+1} · ${Math.round(mmv(f.w))} × ${Math.round(mmv(f.d))} × ${Math.round(mmv(f.h))} mm`;
@@ -4916,61 +5038,64 @@ function wardrobePlannerSVG(p){
     for(const o of (p.obstacles||[])){if(o.wall==='back'){const ox=x+mmv(o.offset)*sx,ow=mmv(o.w)*sx;g+=`<line x1="${ox}" y1="${y}" x2="${ox+ow}" y2="${y}" stroke="#d34232" stroke-width="8"/>`;}else{const oy=y+mmv(o.offset)*sy,oh=mmv(o.w)*sy;g+=`<line x1="${x+w}" y1="${oy}" x2="${x+w}" y2="${oy+oh}" stroke="#d34232" stroke-width="8"/>`;}}
     let bx=x;frames.filter(f=>f.wall==='back').forEach((f,i)=>{const fw=mmv(f.w)*sx,fd=mmv(f.d)*sy;g+=`<rect class="wp-selected" data-wpf="${f.id}" x="${bx}" y="${y}" width="${fw}" height="${fd}" fill="${p.frameColor}" stroke="${sel===f.id?'#2458ff':'#555'}" stroke-width="${sel===f.id?4:1.5}"/><text x="${bx+fw/2}" y="${y+fd/2+4}" text-anchor="middle" font-size="11">${Math.round(mmv(f.w))}</text>`;bx+=fw;});
     let ry=y;frames.filter(f=>f.wall==='right').forEach(f=>{const fw=mmv(f.w)*sy,fd=mmv(f.d)*sx;g+=`<rect class="wp-selected" data-wpf="${f.id}" x="${x+w-fd}" y="${ry}" width="${fd}" height="${fw}" fill="${p.frameColor}" stroke="${sel===f.id?'#2458ff':'#555'}" stroke-width="${sel===f.id?4:1.5}"/>`;ry+=fw;});
-    return`<svg viewBox="0 0 900 560" role="img" aria-label="Wardrobe plan"><rect width="900" height="560" fill="#f2f3f3"/>${g}<text x="100" y="48" font-size="16" font-weight="700">TOP PLAN · ${Math.round(mmv(p.room.w))} × ${Math.round(mmv(p.room.d))} mm</text></svg>`;
+    return`<svg viewBox="0 0 900 560" role="img" aria-label="${WU('svgPlanLabel')}"><rect width="900" height="560" fill="#f2f3f3"/>${g}<text x="100" y="48" font-size="16" font-weight="700">${WU('svgTopPlan')} · ${Math.round(mmv(p.room.w))} × ${Math.round(mmv(p.room.d))} mm</text></svg>`;
   }
   if(WP_VIEW==='front'){
     const total=Math.max(1,mmv(S.total)),sc=Math.min(650/total,.19),baseY=470,hsc=.17;let x=110,g='';
     frames.forEach((f,i)=>{const w=mmv(f.w)*sc,h=mmv(f.h)*hsc,y=baseY-h;g+=`<g class="wp-selected" data-wpf="${f.id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${p.frameColor}" stroke="${sel===f.id?'#2458ff':'#4d5155'}" stroke-width="${sel===f.id?4:2}"/>${detail(f,x,y,w,h)}<text x="${x+w/2}" y="${baseY+20}" text-anchor="middle" font-size="10">${label(f,i)}</text></g>`;x+=w;});
-    return`<svg viewBox="0 0 900 560" role="img" aria-label="Wardrobe front"><rect width="900" height="560" fill="#f2f3f3"/><line x1="70" y1="470" x2="830" y2="470" stroke="#333" stroke-width="2"/>${g}<text x="70" y="45" font-size="16" font-weight="700">UNROLLED FRONT · ${Math.round(total)} mm</text></svg>`;
+    return`<svg viewBox="0 0 900 560" role="img" aria-label="${WU('svgFrontLabel')}"><rect width="900" height="560" fill="#f2f3f3"/><line x1="70" y1="470" x2="830" y2="470" stroke="#333" stroke-width="2"/>${g}<text x="70" y="45" font-size="16" font-weight="700">${WU('svgUnrolled')} · ${Math.round(total)} mm</text></svg>`;
   }
+  const elLabel=t=>WU(t==='window'?'elWindow':t==='radiator'?'elRadiator':'elDoor');
   const bx0=88,by=447,bw=640,bh=378,sx=bw/mmv(p.room.w),sy=bh/mmv(p.room.h);let g=`<rect x="${bx0}" y="${by-bh}" width="${bw}" height="${bh}" fill="${p.wallColor}" stroke="#c5c8ca"/><polygon points="${bx0},${by} ${bx0+bw},${by} 842,515 55,515" fill="${p.floorColor}"/><polygon points="${bx0+bw},${by-bh} 842,137 842,515 ${bx0+bw},${by}" fill="#d8d9d8"/>`;
-  for(const o of (p.obstacles||[]))if(o.wall==='back'){const ox=bx0+mmv(o.offset)*sx,ow=mmv(o.w)*sx,oh=mmv(o.h)*sy,oy=by-mmv(o.bottom||0)*sy-oh;g+=`<rect x="${ox}" y="${oy}" width="${ow}" height="${oh}" fill="${o.type==='window'?'#ddecf1':o.type==='radiator'?'#f5f5f3':'#ded8cf'}" stroke="#d34232" stroke-width="3" stroke-dasharray="7 5"/><text x="${ox+5}" y="${oy+16}" font-size="10" fill="#9b2d22">${o.type}</text>`;}
+  for(const o of (p.obstacles||[]))if(o.wall==='back'){const ox=bx0+mmv(o.offset)*sx,ow=mmv(o.w)*sx,oh=mmv(o.h)*sy,oy=by-mmv(o.bottom||0)*sy-oh;g+=`<rect x="${ox}" y="${oy}" width="${ow}" height="${oh}" fill="${o.type==='window'?'#ddecf1':o.type==='radiator'?'#f5f5f3':'#ded8cf'}" stroke="#d34232" stroke-width="3" stroke-dasharray="7 5"/><text x="${ox+5}" y="${oy+16}" font-size="10" fill="#9b2d22">${esc(elLabel(o.type))}</text>`;}
   let x=bx0;frames.filter(f=>f.wall==='back').forEach((f,i)=>{const w=mmv(f.w)*sx,h=mmv(f.h)*sy,y=by-h;g+=`<g class="wp-selected" data-wpf="${f.id}"><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${p.frameColor}" stroke="${sel===f.id?'#2458ff':'#54585c'}" stroke-width="${sel===f.id?4:2}"/>${detail(f,x,y,w,h)}<text x="${x+w/2}" y="${by+17}" text-anchor="middle" font-size="10">${Math.round(mmv(f.w))}</text></g>`;x+=w;});
   let off=0;frames.filter(f=>f.wall==='right').forEach(f=>{const len=mmv(f.w)/mmv(p.room.d)*68,dep=mmv(f.d)/mmv(p.room.w)*bw,h=mmv(f.h)*sy,y=by-h,x0=bx0+bw+off;g+=`<g class="wp-selected" data-wpf="${f.id}"><polygon points="${x0-dep},${y} ${x0},${y+len*.22} ${x0},${by+len} ${x0-dep},${by}" fill="${p.frameColor}" stroke="${sel===f.id?'#2458ff':'#555'}" stroke-width="${sel===f.id?4:2}"/></g>`;off+=len;});
-  return`<svg viewBox="0 0 900 560" role="img" aria-label="Wardrobe room"><rect width="900" height="560" fill="#eef0f0"/>${g}<line x1="${bx0}" y1="52" x2="${bx0+bw}" y2="52" stroke="#222"/><text x="${bx0+bw/2}" y="42" text-anchor="middle" font-size="12">${Math.round(mmv(p.room.w))} mm</text></svg>`;
+  return`<svg viewBox="0 0 900 560" role="img" aria-label="${WU('svgRoomLabel')}"><rect width="900" height="560" fill="#eef0f0"/>${g}<line x1="${bx0}" y1="52" x2="${bx0+bw}" y2="52" stroke="#222"/><text x="${bx0+bw/2}" y="42" text-anchor="middle" font-size="12">${Math.round(mmv(p.room.w))} mm</text></svg>`;
 }
 function renderWardrobePlanner(){
   const p=wardrobePlannerEnsure(),f=p.frames.find(q=>q.id===WPSEL)||p.frames[0],S=wardrobePlannerStats(p),mmn=v=>Math.round(mmv(v));
   WPSEL=f.id;
-  const nav=[['room','⌗','Room'],['frames','▥','Frames'],['interior','☷','Interior'],['fronts','▤','Fronts'],['finish','●','Finish']];
-  const field=(key,label,val,unit='mm')=>`<div class="wp-field"><label>${label}</label><input data-wp-${key} inputmode="numeric" value="${mmn(val)}"><span class="unit">${unit}</span></div>`;
+  const nav=[['room','⌗',WU('tabRoom')],['frames','▥',WU('tabFrames')],['interior','☷',WU('tabInterior')],['fronts','▤',WU('tabFronts')],['finish','●',WU('tabFinish')]];
+  const field=(key,label,val,unit='mm')=>`<div class="wp-field"><label>${label}</label><input data-wp-${key} inputmode="numeric" value="${mmn(val)}"><span class="unit">${unit==='pcs'?WU('pcs'):unit}</span></div>`;
   const wallPos=q=>{const a=p.frames.filter(f2=>f2.wall===q.wall);return{at:a.findIndex(f2=>f2.id===q.id),n:a.length};};
+  const wallOptions=(cur,dataAttr)=>`<select ${dataAttr}><option value="back" ${cur==='back'?'selected':''}>${WU('wallBack')}</option><option value="right" ${cur==='right'?'selected':''}>${WU('wallRight')}</option></select>`;
   let panel='';
   if(WP_TAB==='room'){
     const obs=p.obstacles||(p.obstacles=[]),ob=obs.find(q=>q.id===WPOBSEL);
-    panel=`<h3>Adapt the room</h3><p>Set the real room before placing frames. Add doors, windows and radiators so collisions are caught before production.</p>
-      ${field('room="w"','Wall width',p.room.w)}${field('room="d"','Room depth',p.room.d)}${field('room="h"','Ceiling height',p.room.h)}
-      <div class="wp-sub">Skirting board</div>${field('room="skirtingH"','Height',p.room.skirtingH)}${field('room="skirtingD"','Depth',p.room.skirtingD)}
-      <div class="wp-sub">Room elements</div><div class="wp-products">${[['door','Door'],['window','Window'],['radiator','Radiator']].map(q=>`<button class="wp-product" data-wp-obadd="${q[0]}"><b>＋ ${q[1]}</b><small>Add to a wall</small></button>`).join('')}</div>
-      <div class="wp-list" style="margin-top:9px">${obs.map((q,i)=>`<div class="wp-item ${q.id===WPOBSEL?'on':''}"><button data-wp-obselect="${q.id}">${i+1}</button><span><b>${q.type[0].toUpperCase()+q.type.slice(1)}</b><small>${q.wall} wall · ${mmn(q.offset)}–${mmn(q.offset+q.w)} mm</small></span><span class="wp-mini"><button data-wp-obdel="${q.id}">×</button></span></div>`).join('')}</div>
-      ${ob?`<div class="wp-sub">Selected room element</div><div class="wp-field"><label>Wall</label><select data-wp-obfield="wall"><option value="back" ${ob.wall==='back'?'selected':''}>Back wall</option><option value="right" ${ob.wall==='right'?'selected':''}>Right wall</option></select><span></span></div>${field('obfield="offset"','Position',ob.offset)}${field('obfield="w"','Width',ob.w)}${field('obfield="bottom"','Height from floor',ob.bottom)}${field('obfield="h"','Element height',ob.h)}`:''}`;
+    const elLabel=t=>WU(t==='window'?'elWindow':t==='radiator'?'elRadiator':'elDoor');
+    panel=`<h3>${WU('roomTitle')}</h3><p>${WU('roomHelp')}</p>
+      ${field('room="w"',WU('wallWidth'),p.room.w)}${field('room="d"',WU('roomDepth'),p.room.d)}${field('room="h"',WU('ceilingHeight'),p.room.h)}
+      <div class="wp-sub">${WU('skirting')}</div>${field('room="skirtingH"',WU('height'),p.room.skirtingH)}${field('room="skirtingD"',WU('depth'),p.room.skirtingD)}
+      <div class="wp-sub">${WU('roomElements')}</div><div class="wp-products">${[['door','elDoor'],['window','elWindow'],['radiator','elRadiator']].map(q=>`<button class="wp-product" data-wp-obadd="${q[0]}"><b>＋ ${WU(q[1])}</b><small>${WU('addToWall')}</small></button>`).join('')}</div>
+      <div class="wp-list" style="margin-top:9px">${obs.map((q,i)=>`<div class="wp-item ${q.id===WPOBSEL?'on':''}"><button data-wp-obselect="${q.id}">${i+1}</button><span><b>${elLabel(q.type)}</b><small>${q.wall==='back'?WU('wallBack'):WU('wallRight')} · ${mmn(q.offset)}–${mmn(q.offset+q.w)} mm</small></span><span class="wp-mini"><button data-wp-obdel="${q.id}">×</button></span></div>`).join('')}</div>
+      ${ob?`<div class="wp-sub">${WU('selectedElement')}</div><div class="wp-field"><label>${WU('wall')}</label>${wallOptions(ob.wall,'data-wp-obfield="wall"')}<span></span></div>${field('obfield="offset"',WU('position'),ob.offset)}${field('obfield="w"',WU('width'),ob.w)}${field('obfield="bottom"',WU('heightFromFloor'),ob.bottom)}${field('obfield="h"',WU('elementHeight'),ob.h)}`:''}`;
   }
-  if(WP_TAB==='frames')panel=`<h3>Frames and corner parts</h3><p>Add from the catalogue, select a frame in the room, then move, resize, duplicate or remove it.</p>
-    <div class="wp-field"><label>Selected wall</label><select data-wp-frame-field="wall"><option value="back" ${f.wall==='back'?'selected':''}>Back wall</option><option value="right" ${f.wall==='right'?'selected':''}>Right wall</option></select><span></span></div>
-    ${field('frame-field="w"','Selected width',f.w)}${field('frame-field="d"','Selected depth',f.d)}${field('frame-field="h"','Selected height',f.h)}
-    <div class="wp-sub">Insert from side menu</div>
-    <div class="wp-field"><label>Place new frame</label><select data-wp-addwall><option value="back" ${p.addWall==='back'?'selected':''}>Back wall</option><option value="right" ${p.addWall==='right'?'selected':''}>Right wall</option></select><span></span></div>
-    <div class="wp-field"><label>New depth</label><select data-wp-filter="filterDepth"><option value="350" ${mmn(p.filterDepth)===350?'selected':''}>350 mm</option><option value="580" ${mmn(p.filterDepth)===580?'selected':''}>580 mm</option></select><span></span></div>
-    <div class="wp-field"><label>New height</label><select data-wp-filter="filterHeight"><option value="2010" ${mmn(p.filterHeight)===2010?'selected':''}>2010 mm</option><option value="2360" ${mmn(p.filterHeight)===2360?'selected':''}>2360 mm</option></select><span></span></div>
+  if(WP_TAB==='frames')panel=`<h3>${WU('framesTitle')}</h3><p>${WU('framesHelp')}</p>
+    <div class="wp-field"><label>${WU('selectedWall')}</label>${wallOptions(f.wall,'data-wp-frame-field="wall"')}<span></span></div>
+    ${field('frame-field="w"',WU('selectedWidth'),f.w)}${field('frame-field="d"',WU('selectedDepth'),f.d)}${field('frame-field="h"',WU('selectedHeight'),f.h)}
+    <div class="wp-sub">${WU('insertMenu')}</div>
+    <div class="wp-field"><label>${WU('placeNewFrame')}</label>${wallOptions(p.addWall,'data-wp-addwall')}<span></span></div>
+    <div class="wp-field"><label>${WU('newDepth')}</label><select data-wp-filter="filterDepth"><option value="350" ${mmn(p.filterDepth)===350?'selected':''}>350 mm</option><option value="580" ${mmn(p.filterDepth)===580?'selected':''}>580 mm</option></select><span></span></div>
+    <div class="wp-field"><label>${WU('newHeight')}</label><select data-wp-filter="filterHeight"><option value="2010" ${mmn(p.filterHeight)===2010?'selected':''}>2010 mm</option><option value="2360" ${mmn(p.filterHeight)===2360?'selected':''}>2360 mm</option></select><span></span></div>
     <div class="wp-products">
-      ${[[500,'Frame','frame'],[750,'Frame','frame'],[1000,'Frame','frame'],[530,'Corner unit','corner'],[350,'Mid add-on','mid'],[350,'End shelf','end']].map(q=>`<button class="wp-product" data-wp-add="${q[2]}" data-wp-w="${q[0]}"><span class="ico" style="width:${Math.max(24,q[0]/18)}px"></span><b>＋ ${q[1]}</b><small>${q[0]} mm wide</small></button>`).join('')}</div>
-    <div class="wp-sub">Placed components</div><div class="wp-list">${p.frames.map((q,i)=>{const pos=wallPos(q);return`<div class="wp-item ${q.id===f.id?'on':''}"><button data-wp-select="${q.id}">${i+1}</button><span><b>${q.kind==='corner'?'Corner':q.kind==='mid'?'Mid add-on':q.kind==='end'?'End shelf':'Frame'} · ${mmn(q.w)} mm</b><small>${q.wall==='back'?'Back':'Right'} wall · ${mmn(q.d)} deep</small></span><span class="wp-mini"><button data-wp-act="left" data-wp-id="${q.id}" ${pos.at<=0?'disabled':''} title="Move left on this wall">←</button><button data-wp-act="right" data-wp-id="${q.id}" ${pos.at>=pos.n-1?'disabled':''} title="Move right on this wall">→</button><button data-wp-act="dup" data-wp-id="${q.id}" title="Duplicate">⧉</button><button data-wp-act="del" data-wp-id="${q.id}" ${p.frames.length<=1?'disabled':''} title="Delete">×</button></span></div>`;}).join('')}</div>`;
-  if(WP_TAB==='interior')panel=`<h3>Interior fittings</h3><p>Choose the inside of the selected ${mmn(f.w)} mm frame. Shelves, drawers and rails are included in the construction model.</p>
-    <div class="wp-choice">${[['hanging','Hanging rail'],['shelves','Shelves'],['drawers','Drawers'],['mixed','Mixed storage']].map(q=>`<button data-wp-interior="${q[0]}" class="${f.interior===q[0]?'on':''}">${q[1]}</button>`).join('')}</div>
-    <div class="wp-sub">Fine adjustment</div>${field('shelves','Number of shelves',mm(f.zones.reduce((n,z)=>n+(z.shelves||0),0)),'pcs')}${field('drawers','Number of drawers',mm(f.zones.reduce((n,z)=>n+(z.type==='drawers'?(z.count||0):0),0)),'pcs')}
-    <div class="wp-choice" style="margin-top:12px"><button data-wp-light class="${f.light?'on':''}">${f.light?'✓ ':''}Integrated LED light</button></div>`;
-  if(WP_TAB==='fronts')panel=`<h3>Doors and handles</h3><p>Fronts are independent of the interior and update live in the room view and production schedule.</p>
-    <div class="wp-choice">${[['none','Open wardrobe'],['hinged','Hinged doors'],['sliding','Sliding front']].map(q=>`<button data-wp-front="${q[0]}" class="${f.front===q[0]?'on':''}">${q[1]}</button>`).join('')}</div>
-    ${f.front!=='none'?field('frontcount','Front panels',mm(f.frontCount||1),'pcs'):''}
-    <div class="wp-sub">Handle</div><div class="wp-choice">${[['none','Push to open'],['grooved','Finger groove'],['bar','Bar handle'],['knob','Knob']].map(q=>`<button data-wp-handle="${q[0]}" class="${f.handle===q[0]?'on':''}">${q[1]}</button>`).join('')}</div>`;
+      ${[[500,'prodFrame','frame'],[750,'prodFrame','frame'],[1000,'prodFrame','frame'],[530,'prodCorner','corner'],[350,'prodMid','mid'],[350,'prodEnd','end']].map(q=>`<button class="wp-product" data-wp-add="${q[2]}" data-wp-w="${q[0]}"><span class="ico" style="width:${Math.max(24,q[0]/18)}px"></span><b>＋ ${WU(q[1])}</b><small>${q[0]} ${WU('wideSuffix')}</small></button>`).join('')}</div>
+    <div class="wp-sub">${WU('placedComponents')}</div><div class="wp-list">${p.frames.map((q,i)=>{const pos=wallPos(q);return`<div class="wp-item ${q.id===f.id?'on':''}"><button data-wp-select="${q.id}">${i+1}</button><span><b>${WU(q.kind==='corner'?'kindCorner':q.kind==='mid'?'kindMid':q.kind==='end'?'kindEnd':'kindFrame')} · ${mmn(q.w)} mm</b><small>${q.wall==='back'?WU('wallBack'):WU('wallRight')} · ${mmn(q.d)} ${WU('deepSuffix')}</small></span><span class="wp-mini"><button data-wp-act="left" data-wp-id="${q.id}" ${pos.at<=0?'disabled':''} title="${WU('moveLeft')}">←</button><button data-wp-act="right" data-wp-id="${q.id}" ${pos.at>=pos.n-1?'disabled':''} title="${WU('moveRight')}">→</button><button data-wp-act="dup" data-wp-id="${q.id}" title="${WU('dup')}">⧉</button><button data-wp-act="del" data-wp-id="${q.id}" ${p.frames.length<=1?'disabled':''} title="${WU('del')}">×</button></span></div>`;}).join('')}</div>`;
+  if(WP_TAB==='interior')panel=`<h3>${WU('interiorTitle')}</h3><p>${WU('interiorHelp',{n:mmn(f.w)})}</p>
+    <div class="wp-choice">${[['hanging','intHanging'],['shelves','intShelves'],['drawers','intDrawers'],['mixed','intMixed']].map(q=>`<button data-wp-interior="${q[0]}" class="${f.interior===q[0]?'on':''}">${WU(q[1])}</button>`).join('')}</div>
+    <div class="wp-sub">${WU('fineAdjust')}</div>${field('shelves',WU('numShelves'),mm(f.zones.reduce((n,z)=>n+(z.shelves||0),0)),'pcs')}${field('drawers',WU('numDrawers'),mm(f.zones.reduce((n,z)=>n+(z.type==='drawers'?(z.count||0):0),0)),'pcs')}
+    <div class="wp-choice" style="margin-top:12px"><button data-wp-light class="${f.light?'on':''}">${f.light?'✓ ':''}${WU('ledLight')}</button></div>`;
+  if(WP_TAB==='fronts')panel=`<h3>${WU('frontsTitle')}</h3><p>${WU('frontsHelp')}</p>
+    <div class="wp-choice">${[['none','frontOpen'],['hinged','frontHinged'],['sliding','frontSliding']].map(q=>`<button data-wp-front="${q[0]}" class="${f.front===q[0]?'on':''}">${WU(q[1])}</button>`).join('')}</div>
+    ${f.front!=='none'?field('frontcount',WU('frontPanels'),mm(f.frontCount||1),'pcs'):''}
+    <div class="wp-sub">${WU('handle')}</div><div class="wp-choice">${[['none','handleNone'],['grooved','handleGrooved'],['bar','handleBar'],['knob','handleKnob']].map(q=>`<button data-wp-handle="${q[0]}" class="${f.handle===q[0]?'on':''}">${WU(q[1])}</button>`).join('')}</div>`;
   const palette=['#F4F2ED','#C4A477','#D8D0C4','#5A5754','#E8E2D7','#AAB2B5'];
-  if(WP_TAB==='finish')panel=`<h3>Live colours</h3><p>Change carcass and front colours independently. Wall and floor colours help judge the whole room.</p>
-    <div class="wp-sub">Frame colour</div><div class="wp-swatches">${palette.map(c=>`<button class="wp-swatch ${p.frameColor===c?'on':''}" data-wp-colour="frameColor" data-wp-value="${c}" style="background:${c}" title="${c}"></button>`).join('')}</div>
-    <div class="wp-sub">Front colour</div><div class="wp-swatches">${palette.map(c=>`<button class="wp-swatch ${p.frontColor===c?'on':''}" data-wp-colour="frontColor" data-wp-value="${c}" style="background:${c}" title="${c}"></button>`).join('')}</div>
-    <div class="wp-sub">Room colours</div><div class="wp-colorfield"><label>Walls</label><input type="color" data-wp-custom="wallColor" value="${p.wallColor}"></div><div class="wp-colorfield"><label>Floor</label><input type="color" data-wp-custom="floorColor" value="${p.floorColor}"></div>`;
-  const problems=[];if(S.backFree<0)problems.push(`Back wall is ${Math.abs(mmn(S.backFree))} mm too short.`);if(S.rightFree<0)problems.push(`Right wall is ${Math.abs(mmn(S.rightFree))} mm too short.`);if(S.heightFree<mm(10))problems.push(`Only ${mmn(S.heightFree)} mm remains above the frames; allow assembly clearance.`);if(S.collisions.length)problems.push(`${S.collisions.length} frame/room-element collision${S.collisions.length===1?'':'s'} must be resolved.`);
-  panel+=`<div class="wp-alert ${problems.length?'':'wp-ok'}">${problems.length?problems.join(' '):`Fits the room: ${mmn(S.backFree)} mm free on the back wall and ${mmn(S.rightFree)} mm on the right wall.`}</div>`;
-  $('preview').innerHTML=`<div class="wplanner"><div class="wp-stage"><div class="wp-toolbar"><strong>VAN Room Planner</strong><span class="wp-viewtabs">${[['room','Room'],['front','Front'],['plan','Plan']].map(q=>`<button data-wp-view="${q[0]}" class="${WP_VIEW===q[0]?'on':''}">${q[1]}</button>`).join('')}</span></div><div class="wp-canvas">${wardrobePlannerSVG(p)}</div><div class="wp-help">Click a component to edit it · all changes update the production model</div></div><aside class="wp-side"><nav class="wp-nav">${nav.map(q=>`<button data-wp-tab="${q[0]}" class="${WP_TAB===q[0]?'on':''}"><i>${q[1]}</i>${q[2]}</button>`).join('')}</nav><div class="wp-panel">${panel}</div></aside></div>`;
+  if(WP_TAB==='finish')panel=`<h3>${WU('finishTitle')}</h3><p>${WU('finishHelp')}</p>
+    <div class="wp-sub">${WU('frameColour')}</div><div class="wp-swatches">${palette.map(c=>`<button class="wp-swatch ${p.frameColor===c?'on':''}" data-wp-colour="frameColor" data-wp-value="${c}" style="background:${c}" title="${c}"></button>`).join('')}</div>
+    <div class="wp-sub">${WU('frontColour')}</div><div class="wp-swatches">${palette.map(c=>`<button class="wp-swatch ${p.frontColor===c?'on':''}" data-wp-colour="frontColor" data-wp-value="${c}" style="background:${c}" title="${c}"></button>`).join('')}</div>
+    <div class="wp-sub">${WU('roomColours')}</div><div class="wp-colorfield"><label>${WU('walls')}</label><input type="color" data-wp-custom="wallColor" value="${p.wallColor}"></div><div class="wp-colorfield"><label>${WU('floor')}</label><input type="color" data-wp-custom="floorColor" value="${p.floorColor}"></div>`;
+  const problems=[];if(S.backFree<0)problems.push(WU('alertBackShort',{n:Math.abs(mmn(S.backFree))}));if(S.rightFree<0)problems.push(WU('alertRightShort',{n:Math.abs(mmn(S.rightFree))}));if(S.heightFree<mm(10))problems.push(WU('alertClearance',{n:mmn(S.heightFree)}));if(S.collisions.length)problems.push(WU('alertCollision',{n:S.collisions.length,s:S.collisions.length===1?'':'s'}));
+  panel+=`<div class="wp-alert ${problems.length?'':'wp-ok'}">${problems.length?problems.join(' '):WU('alertFits',{a:mmn(S.backFree),b:mmn(S.rightFree)})}</div>`;
+  $('preview').innerHTML=`<div class="wplanner"><div class="wp-stage"><div class="wp-toolbar"><strong>${WU('plannerTitle')}</strong><span class="wp-viewtabs">${[['room','viewRoom'],['front','viewFront'],['plan','viewPlan']].map(q=>`<button data-wp-view="${q[0]}" class="${WP_VIEW===q[0]?'on':''}">${WU(q[1])}</button>`).join('')}</span></div><div class="wp-canvas">${wardrobePlannerSVG(p)}</div><div class="wp-help">${WU('helpLine')}</div></div><aside class="wp-side"><nav class="wp-nav">${nav.map(q=>`<button data-wp-tab="${q[0]}" class="${WP_TAB===q[0]?'on':''}"><i>${q[1]}</i>${q[2]}</button>`).join('')}</nav><div class="wp-panel">${panel}</div></aside></div>`;
   const root=$('preview'),mutate=(label,fn)=>{mark(label);fn();wardrobePlannerSync();renderWardrobePlanner();};
   root.querySelectorAll('[data-wp-tab]').forEach(b=>b.addEventListener('click',()=>{WP_TAB=b.dataset.wpTab;renderWardrobePlanner();}));
   root.querySelectorAll('[data-wp-view]').forEach(b=>b.addEventListener('click',()=>{WP_VIEW=b.dataset.wpView;renderWardrobePlanner();}));

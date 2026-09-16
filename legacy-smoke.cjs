@@ -111,7 +111,13 @@ console.log('PASS: wardrobe room overflow, ceiling clearance, obstacle collision
 `,{assert,console});
 
 const plannerFns=html.slice(html.indexOf('function wardrobePlannerReconcile('),html.indexOf('function renderConfirm(){'));
-vm.runInNewContext(core+`
+/* renderWardrobePlanner()/wardrobePlannerSVG() now read WU()/WP_UI (§8 fix)
+   — WP_UI, L, T, fmt, PU and WU are all declared earlier in the file than
+   core's own start point (mm=v=>), so core alone doesn't carry any of them;
+   this test already defines its own T/fmt-free path, so pull in just this
+   one range (through WU, stopping before SU which nothing here needs). */
+const wpUiSlice=html.slice(html.indexOf('const WP_UI={'),html.indexOf('const SU=k=>'));
+vm.runInNewContext(core+wpUiSlice+`
 let cfg={category:'wardrobe',columns:[{w:1,zones:[{type:'doors',ratio:1,count:2,shelves:3}]}],zones:[{type:'doors',ratio:1,count:2,shelves:3}],handles:'bar',colour:'#F4F2ED',sourceMeasurements:{}};
 let WP_TAB='frames',WP_VIEW='room',WPSEL=null,WPOBSEL=null;
 const preview={innerHTML:'',querySelectorAll:()=>[],querySelector:()=>null},els={preview,wT:{value:'2450'},wM:{value:'2450'},wB:{value:'2450'},hL:{value:'2400'},hC:{value:'2400'},hR:{value:'2400'},dP:{value:'600'},sc:{value:'15'}};
