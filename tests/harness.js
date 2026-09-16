@@ -3,12 +3,19 @@
    person would: clicks, typed values, drags — not internal function calls
    only, so UI-wiring bugs the old vm.Script smoke test could never see
    (event listeners, DOM ids, button state) are actually exercised. */
-const fs=require('fs'),path=require('path'),{JSDOM}=require('jsdom');
+const fs=require('fs'),path=require('path'),{JSDOM,VirtualConsole}=require('jsdom');
 const HTML=path.join(__dirname,'..','index.html');
 
 function boot(){
+  const errors=[];
+  const vc=new VirtualConsole();
+  /* jsdom reports an exception thrown inside a DOM event listener (a click
+     handler, an input handler, …) as a 'jsdomError' on the virtual console
+     rather than letting it propagate to the test — so a crash inside a real
+     click handler would otherwise pass silently. Capture every one. */
+  vc.on('jsdomError',err=>errors.push(err));
   const dom=new JSDOM(fs.readFileSync(HTML,'utf8'),
-   {url:'http://localhost/van-v16/',runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){
+   {url:'http://localhost/van-v16/',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){
     w.fetch=()=>Promise.reject(new Error('offline in test'));
     w.scrollTo=()=>{};
     w.storage={get:async()=>null,set:async()=>({}),list:async()=>({keys:[]})};
@@ -23,7 +30,12 @@ function boot(){
     w.cancelAnimationFrame=id=>clearTimeout(id);
   }});
   const W=dom.window,doc=W.document;
-  return {W,doc,
+  W.addEventListener('error',e=>errors.push(e.error||e.message||e));
+  return {W,doc,errors,
+    /* fail loudly the first time any uncaught exception happened, instead of
+       a test quietly passing on a crashed page */
+    assertNoErrors(){ if(errors.length) throw new Error('uncaught error(s) during the test: '+
+      errors.map(e=>(e&&e.stack)||String(e)).join('\n---\n')); },
     $:s=>doc.querySelector(s),
     $$:s=>[...doc.querySelectorAll(s)],
     click:el=>el&&el.dispatchEvent(new W.MouseEvent('click',{bubbles:true})),

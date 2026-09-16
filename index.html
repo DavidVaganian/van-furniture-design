@@ -981,6 +981,18 @@ function hingeSpec(h,w,th){
   else for(let i=0;i<n;i++) pos.push(Math.round(first+(last-first)*i/(n-1)));
   return{count:n,kg,positions:pos};
 }
+/* §3 §10 — a door/drawer count is a request, not a guarantee: nothing stops
+   a corrupted autosave, an AI recognition result or a hand-edited project
+   file from asking for far more fronts than a section can physically hold.
+   Cap the count to the most that still fits at a sane minimum width/height,
+   rather than let the per-front size (and therefore its box) go negative —
+   an unbuildable request should draw as few wide fronts, never as many
+   negative-size ones (500 doors on a 900 mm bay used to produce a -1.2 mm
+   door; that geometry still reached the cut list and the drawing). */
+function capFronts(want,avail,gap,min){
+  const n=Math.floor((avail+gap)/(min+gap));
+  return Math.max(1,Math.min(want,Number.isFinite(n)?n:1));
+}
 function generateCabinet(cfg,fit){
   const t=R.panelT,W=fit.W,H=fit.H,D=fit.D,iW=W-2*t,c=[];
   const add=(k,q,fl,fw,th,mat,edges,boxes,mach)=>c.push({k,q,fl,fw,th,mat,edges,boxes:boxes||[],mach:mach||[]});
@@ -1020,7 +1032,14 @@ function generateCabinet(cfg,fit){
      even split so the geometry stays valid (the size list still shows it). */
   if(geom.some(g=>g.w<mm(60))){
     const even=Math.floor(colInner/nC); let x=t;
-    geom.forEach((g,i)=>{ g.x=x; g.w=(i===nC-1)?colInner-(x-t):even; x+=g.w+t; });
+    /* the last section takes colInner minus the OTHER (nC-1) sections' own
+       widths — not minus (x-t), which had accumulated a divider thickness
+       for every section already placed. colInner already excludes dividers
+       (colInner=iW-nInternal*t), so mixing them back in here double-counted
+       every divider crossed so far and could drive the last section's width
+       negative on any cabinet with more than a handful of sections (a
+       20-section, 900 mm-wide test cabinet produced a -3159 wide shelf). */
+    geom.forEach((g,i)=>{ g.x=x; g.w=(i===nC-1)?colInner-even*(nC-1):even; x+=g.w+t; });
   }
   /* front slices tile [0, W] so an overlay front covers the side or divider behind it */
   const fb=[0];
@@ -1082,14 +1101,23 @@ function generateCabinet(cfg,fit){
           w:Math.round(CW-mm(40)),h:R.railDia,d:R.railDia});
       if(z.type==='open')pushShelves(z.shelves||0,y,z._h,z,zi);
       if(z.type==='doors'){
-        const n=Math.max(1,z.count),w=Math.round((FW-2*R.frontEdgeGap-(n-1)*R.frontCentreGap)/n),dh=z._h-R.frontStackGap;
+        const n=capFronts(Math.max(1,z.count),FW-2*R.frontEdgeGap,R.frontCentreGap,mm(60)),
+              w=Math.round((FW-2*R.frontEdgeGap-(n-1)*R.frontCentreGap)/n),dh=z._h-R.frontStackGap;
+        /* §3 — z.count is the count generate() actually drew, same as z._h
+           already is: every other reader (zoneEdges, sizeRows, the step-3
+           popover, the AI prompt) trusts z.count directly rather than
+           res.parts, so leaving it uncapped here would desync the cfg the
+           user edits from the parts that were actually generated the moment
+           capping ever kicks in — the exact drift this pass exists to stop. */
+        z.count=n;
         const bx=[];for(let i=0;i<n;i++)bx.push({x:FX+R.frontEdgeGap+i*(w+R.frontCentreGap),y,z:-t,w,h:dh,d:t});
         const dp=A('door',n,dh,w,t,'front',{l:R.fE,rt:R.fE,tp:R.fE,bt:R.fE},bx); dp.zi=zi; dp.hinges=hingeSpec(dh,w,t);
         doorPart=doorPart||{h:dh,w};nDoor+=n;
         if(z.shelves)pushShelves(z.shelves,y,z._h,z,zi);
       }
       if(z.type==='drawers'){
-        const n=Math.max(1,z.count);
+        const n=capFronts(Math.max(1,z.count),z._h,R.frontStackGap,mm(40));
+        z.count=n;   /* keep cfg in sync with what was actually drawn — see doors, above */
         const even=Math.round((z._h-(n-1)*R.frontStackGap)/n);
         const hs=z.heights&&z.heights.length===n?z.heights.slice():new Array(n).fill(even);
         const fw=Math.round(FW-2*R.frontEdgeGap);
