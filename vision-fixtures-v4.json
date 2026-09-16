@@ -1,0 +1,56 @@
+{
+  "schema": "van-vision-fixtures-v1",
+  "fixtures": [
+    {
+      "id": "annotated-original",
+      "kind": "annotated_plan",
+      "expected": {
+        "rootBayCount": 4,
+        "atomicColumnCount": 4,
+        "drawerFronts": 6,
+        "visibleDoors": 0,
+        "dimensionsMm": { "width": 2400, "height": 2200, "depth": 470 }
+      }
+    },
+    {
+      "id": "styled-open-wardrobe-1",
+      "file": "/Users/artyomvaganian/Downloads/dc19741b0a56550ed0a8330449c2ed5a.jpg",
+      "kind": "product_photo",
+      "expected": {
+        "rootBayCount": 5,
+        "drawerFronts": 8,
+        "visibleDoors": 0,
+        "hangingRails": 5,
+        "requiresNestedTopBand": true,
+        "millimetresAllowed": false
+      }
+    },
+    {
+      "id": "perspective-glass-wardrobe",
+      "file": "/Users/artyomvaganian/Downloads/007e262c082dd9d49a35c8ec4c629146.jpg",
+      "kind": "product_photo",
+      "expected": {
+        "cameraView": "strong_perspective",
+        "separateFurnitureMustBeExcluded": true,
+        "doorFramesMustNotBecomeCarcassDividers": true,
+        "millimetresAllowed": false,
+        "status": "needs_review"
+      }
+    },
+    {
+      "id": "styled-open-wardrobe-t-junction",
+      "file": "/Users/artyomvaganian/Downloads/516315448f0cc40d49da0d3f9b427924.jpg",
+      "kind": "render",
+      "expected": {
+        "rootBayCount": 3,
+        "atomicColumnCount": 4,
+        "drawerFronts": 6,
+        "visibleDoors": 0,
+        "hangingRails": 4,
+        "partialDividerCount": 1,
+        "sharedShelfAcrossAtomicColumns": true,
+        "millimetresAllowed": false
+      }
+    }
+  ]
+}
