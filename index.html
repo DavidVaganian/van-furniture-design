@@ -654,7 +654,30 @@ en:{lang:'EN',brand:'Furniture design<br>&amp; construction',
  vKitchenFit:'The cabinet run fits the available wall with {free} mm for fillers and clearance.',
  vKitchenOverflow:'The cabinets are {over} mm wider than the available wall.',vKitchenMissingSink:'The run has no sink cabinet.',vKitchenMissingHob:'The run has no hob or oven.',vKitchenMissingFridge:'The kitchen has no fridge unit.',
  vKitchenDishwasher:'Place the dishwasher beside the sink to shorten plumbing.',vKitchenLanding:'Keep at least 300 mm of landing space beside the hob.',vKitchenLinearSplit:'Long stock is divided at cabinet boundaries: {worktop} worktop piece(s) and {plinth} plinth piece(s).',
- fixKitchenFit:'Fit cabinets to the wall',fixAddSink:'Add sink',fixAddOven:'Add oven',fixAddFridge:'Add fridge'},
+ fixKitchenFit:'Fit cabinets to the wall',fixAddSink:'Add sink',fixAddOven:'Add oven',fixAddFridge:'Add fridge',
+ /* wardrobe planner, bathroom and bed validation — these generators shipped
+    without I18N coverage; every t: and fixes[].label below was a literal
+    English sentence regardless of the chosen language (§8) */
+ vPlannerBack:'The wardrobe exceeds the back wall by {n} mm.',
+ vPlannerRight:'The wardrobe exceeds the right wall by {n} mm.',
+ vPlannerHeight:'Frame-to-ceiling clearance is {n} mm.',
+ vPlannerCollision:'{n} room element collision{s} must be resolved.',
+ fixPlannerWidth:'Extend room width to fit',fixPlannerDepth:'Extend room depth to fit',
+ fixPlannerClearance:'Set 40 mm assembly clearance',fixPlannerCollision:'Remove first conflicting room element',
+ vBathRim:'Finished basin rim height is {n} mm; verify the customer requirement.',
+ vBathRimOk:'Finished basin rim height: {n} mm.',
+ vBathLayout:'The basin layout does not fit the selected vanity top.',
+ vBathVesselLow:'The countertop basin height is below 20 mm.',
+ vBathSummary:'{n} {type} basin{s1} with {c} worktop opening{s2} and {p} plumbing clearance operation{s3}.',
+ typeCountertop:'countertop',typeIntegrated:'integrated',
+ fixBathRim:'Set finished rim to {n} mm',fixBathLayout:'Fit and centre the basins',fixBathVessel:'Set basin height to 20 mm',
+ vBedFit:'The {mw} × {ml} mm mattress needs an outer frame of at least {needW} × {needD} mm.',
+ vBedFitOk:'Mattress opening verified for {mw} × {ml} mm.',
+ fixBedFit:'Fit frame to mattress',
+ vKitchenWorktop:'Finished worktop height is {n} mm; the normal adjustable range is 850–950 mm.',
+ vKitchenWorktopOk:'Finished worktop height: {n} mm.',
+ vKitchenHeightErr:'The selected kitchen heights require {needed} mm, but the room height is {have} mm.',
+ fixKitchenWorktop:'Set worktop height to 900 mm',fixKitchenHeight:'Set room height to {n} mm'},
 
 hy:{lang:'ՀԱՅ',brand:'Կահույքի նախագծում<br>և արտադրություն',
  steps:['Նկար','Ստուգում','Չափում','Գծագրեր'],
@@ -748,7 +771,27 @@ hy:{lang:'ՀԱՅ',brand:'Կահույքի նախագծում<br>և արտադր�
  vSagWarn:'Դարակի բացվածքը {s} մմ։ Բեռի տակ կկորանա։',
  vSheet:'{p} {a} × {b} չի տեղավորվում {sl} × {sw} թերթում՝ երկայնական հյուսվածքով։',
  vSheetOK:'Բոլոր մասերը տեղավորվում են {sl} × {sw} թերթում՝ ճիշտ հյուսվածքով։',
- vBadNum:'Մուտքագրեք թիվ {min}-ից {max} մմ միջակայքում։',vKitchenFit:'Պահարանների շարքը տեղավորվում է պատին՝ թողնելով {free} մմ։',vKitchenOverflow:'Պահարանները պատից լայն են {over} մմ-ով։',vKitchenMissingSink:'Շարքում լվացարանի պահարան չկա։',vKitchenMissingHob:'Շարքում սալօջախ կամ վառարան չկա։',vKitchenMissingFridge:'Խոհանոցում սառնարան չկա։',vKitchenDishwasher:'Սպասք լվացող մեքենան դրեք լվացարանի կողքին։',vKitchenLanding:'Սալօջախի կողքին թողեք առնվազն 300 մմ։',vKitchenLinearSplit:'Երկար մասերը բաժանված են պահարանների սահմաններում՝ {worktop} սեղանածածկ և {plinth} ցոկոլային մաս։',fixKitchenFit:'Հարմարեցնել պատին',fixAddSink:'Ավելացնել լվացարան',fixAddOven:'Ավելացնել վառարան',fixAddFridge:'Ավելացնել սառնարան'},
+ vBadNum:'Մուտքագրեք թիվ {min}-ից {max} մմ միջակայքում։',vKitchenFit:'Պահարանների շարքը տեղավորվում է պատին՝ թողնելով {free} մմ։',vKitchenOverflow:'Պահարանները պատից լայն են {over} մմ-ով։',vKitchenMissingSink:'Շարքում լվացարանի պահարան չկա։',vKitchenMissingHob:'Շարքում սալօջախ կամ վառարան չկա։',vKitchenMissingFridge:'Խոհանոցում սառնարան չկա։',vKitchenDishwasher:'Սպասք լվացող մեքենան դրեք լվացարանի կողքին։',vKitchenLanding:'Սալօջախի կողքին թողեք առնվազն 300 մմ։',vKitchenLinearSplit:'Երկար մասերը բաժանված են պահարանների սահմաններում՝ {worktop} սեղանածածկ և {plinth} ցոկոլային մաս։',fixKitchenFit:'Հարմարեցնել պատին',fixAddSink:'Ավելացնել լվացարան',fixAddOven:'Ավելացնել վառարան',fixAddFridge:'Ավելացնել սառնարան',
+ vPlannerBack:'Պահարանը հետևի պատից դուրս է գալիս {n} մմ-ով։',
+ vPlannerRight:'Պահարանը աջ պատից դուրս է գալիս {n} մմ-ով։',
+ vPlannerHeight:'Շրջանակից մինչև առաստաղ եղած հեռավորությունը {n} մմ է։',
+ vPlannerCollision:'Սենյակի {n} տարրի բախում պետք է լուծվի։',
+ fixPlannerWidth:'Ընդլայնել սենյակի լայնությունը',fixPlannerDepth:'Ընդլայնել սենյակի խորությունը',
+ fixPlannerClearance:'Սահմանել 40 մմ մոնտաժային հեռավորություն',fixPlannerCollision:'Հեռացնել առաջին հակասող տարրը',
+ vBathRim:'Լվացարանի եզրի բարձրությունը {n} մմ է. ստուգեք հաճախորդի պահանջը։',
+ vBathRimOk:'Լվացարանի եզրի պատրաստի բարձրությունը՝ {n} մմ։',
+ vBathLayout:'Լվացարանների դասավորությունը չի տեղավորվում ընտրված աշխատասեղանին։',
+ vBathVesselLow:'Վերնադիր լվացարանի բարձրությունը 20 մմ-ից պակաս է։',
+ vBathSummary:'{n} {type} լվացարան՝ {c} անցքով և {p} խողովակաշարի բացվածքով։',
+ typeCountertop:'վերնադիր',typeIntegrated:'ներդրված',
+ fixBathRim:'Սահմանել {n} մմ պատրաստի եզր',fixBathLayout:'Տեղավորել և կենտրոնացնել լվացարանները',fixBathVessel:'Սահմանել 20 մմ լվացարանի բարձրություն',
+ vBedFit:'{mw} × {ml} մմ ներքնակին անհրաժեշտ է առնվազն {needW} × {needD} մմ արտաքին շրջանակ։',
+ vBedFitOk:'Ներքնակի բացվածքը ստուգված է {mw} × {ml} մմ-ի համար։',
+ fixBedFit:'Հարմարեցնել շրջանակը ներքնակին',
+ vKitchenWorktop:'Աշխատասեղանի պատրաստի բարձրությունը {n} մմ է. սովորական միջակայքը 850–950 մմ է։',
+ vKitchenWorktopOk:'Աշխատասեղանի պատրաստի բարձրությունը՝ {n} մմ։',
+ vKitchenHeightErr:'Ընտրված խոհանոցի բարձրություններին անհրաժեշտ է {needed} մմ, բայց սենյակի բարձրությունը {have} մմ է։',
+ fixKitchenWorktop:'Սահմանել 900 մմ աշխատասեղանի բարձրություն',fixKitchenHeight:'Սահմանել {n} մմ սենյակի բարձրություն'},
 
 ru:{lang:'РУС',brand:'Проектирование<br>и производство мебели',
  steps:['Фото','Проверка','Замеры','Чертежи'],
@@ -839,7 +882,27 @@ kitchenMapping:{title:'Спланируйте кухню под клиента',
  vSagWarn:'Пролёт полки {s} мм. Под нагрузкой прогнётся.',
  vSheet:'{p} {a} × {b} не выходит из листа {sl} × {sw} при продольном направлении текстуры.',
  vSheetOK:'Все детали выходят из листа {sl} × {sw} с правильным направлением текстуры.',
- vBadNum:'Введите число от {min} до {max} мм.',vKitchenFit:'Ряд шкафов помещается на стене с запасом {free} мм.',vKitchenOverflow:'Шкафы шире доступной стены на {over} мм.',vKitchenMissingSink:'В ряду нет шкафа под мойку.',vKitchenMissingHob:'В ряду нет варочной панели или духовки.',vKitchenMissingFridge:'В кухне нет холодильника.',vKitchenDishwasher:'Поставьте посудомоечную машину рядом с мойкой.',vKitchenLanding:'Оставьте минимум 300 мм рабочей поверхности рядом с варочной панелью.',vKitchenLinearSplit:'Длинные детали разделены по границам шкафов: частей столешницы — {worktop}, цоколя — {plinth}.',fixKitchenFit:'Подогнать к стене',fixAddSink:'Добавить мойку',fixAddOven:'Добавить духовку',fixAddFridge:'Добавить холодильник'}
+ vBadNum:'Введите число от {min} до {max} мм.',vKitchenFit:'Ряд шкафов помещается на стене с запасом {free} мм.',vKitchenOverflow:'Шкафы шире доступной стены на {over} мм.',vKitchenMissingSink:'В ряду нет шкафа под мойку.',vKitchenMissingHob:'В ряду нет варочной панели или духовки.',vKitchenMissingFridge:'В кухне нет холодильника.',vKitchenDishwasher:'Поставьте посудомоечную машину рядом с мойкой.',vKitchenLanding:'Оставьте минимум 300 мм рабочей поверхности рядом с варочной панелью.',vKitchenLinearSplit:'Длинные детали разделены по границам шкафов: частей столешницы — {worktop}, цоколя — {plinth}.',fixKitchenFit:'Подогнать к стене',fixAddSink:'Добавить мойку',fixAddOven:'Добавить духовку',fixAddFridge:'Добавить холодильник',
+ vPlannerBack:'Шкаф выступает за заднюю стену на {n} мм.',
+ vPlannerRight:'Шкаф выступает за правую стену на {n} мм.',
+ vPlannerHeight:'Зазор от каркаса до потолка — {n} мм.',
+ vPlannerCollision:'Необходимо устранить пересечение с {n} элементом(-ами) помещения.',
+ fixPlannerWidth:'Увеличить ширину помещения',fixPlannerDepth:'Увеличить глубину помещения',
+ fixPlannerClearance:'Задать монтажный зазор 40 мм',fixPlannerCollision:'Удалить первый конфликтующий элемент',
+ vBathRim:'Высота борта раковины — {n} мм; уточните у заказчика.',
+ vBathRimOk:'Готовая высота борта раковины: {n} мм.',
+ vBathLayout:'Раковины не помещаются на выбранной столешнице.',
+ vBathVesselLow:'Высота накладной раковины меньше 20 мм.',
+ vBathSummary:'{n} {type} раковина(ы), {c} вырез(ов) в столешнице и {p} операция(й) под сантехнику.',
+ typeCountertop:'накладная',typeIntegrated:'встроенная',
+ fixBathRim:'Задать высоту борта {n} мм',fixBathLayout:'Разместить и отцентрировать раковины',fixBathVessel:'Задать высоту раковины 20 мм',
+ vBedFit:'Матрасу {mw} × {ml} мм нужна рама не меньше {needW} × {needD} мм.',
+ vBedFitOk:'Проём под матрас проверен для {mw} × {ml} мм.',
+ fixBedFit:'Подогнать раму под матрас',
+ vKitchenWorktop:'Готовая высота столешницы — {n} мм; обычный диапазон регулировки 850–950 мм.',
+ vKitchenWorktopOk:'Готовая высота столешницы: {n} мм.',
+ vKitchenHeightErr:'Выбранным высотам кухни нужно {needed} мм, а высота помещения — {have} мм.',
+ fixKitchenWorktop:'Задать высоту столешницы 900 мм',fixKitchenHeight:'Задать высоту помещения {n} мм'}
 };
 const PARAM_UI={
  en:{title:'Parametric model',live:'LIVE MODEL',tree:'Model tree',room:'Room & opening',carcass:'Carcass',section:'Section',zone:'Zone',kitchenUnit:'Kitchen module',nothing:'Select a part or section in the drawing',nothingHelp:'The inspector follows your selection. Every edit updates the drawing, 3D model and cut list.',width:'Width',height:'Height',depth:'Depth',formula:'Formula',formulaHelp:'Use W, H, D, IW, IH, T, S and N. Example: IW / 3',fixed:'Fixed in millimetres',automatic:'Automatic',component:'Selected component',equalSections:'Equal section widths',symmetry:'Symmetric outer sections',equalZones:'Equal zone heights',lock:'Lock size',unlock:'Automatic size',apply:'Apply',history:'Design history',current:'Current model',edits:'edits',future:'redo',vars:'Variables',formulaError:'The formula is invalid or outside the usable range.',formulaOK:'The formula controls this dimension.',panel:'Panel',innerW:'Inner width',innerH:'Inner height',type:'Type',quantity:'Quantity',open:'Open shelves',doors:'Doors',drawers:'Drawers',select:'Select',modelRoot:'Furniture model',undoTo:'Undo to this step',redoTo:'Redo to this step'},
@@ -1617,10 +1680,10 @@ function schedulePanel(res,cfg,fit){
 function validateKitchen(cfg,fit,res){
   const m=[],types=cfg.kitchen.units.map(u=>u.type),free=fit.W-kitchenUsed(cfg);
   const workH=res.plinthH+res.baseH+res.worktopT;
-  if(workH<mm(850)||workH>mm(950))m.push({l:'warn',t:`Finished worktop height is ${N(mmv(workH))} mm; the normal adjustable range is 850–950 mm.`,fixes:[{k:'kwork',v:900,label:'Set worktop height to 900 mm'}]});
-  else m.push({l:'ok',t:`Finished worktop height: ${N(mmv(workH))} mm.`});
+  if(workH<mm(850)||workH>mm(950))m.push({l:'warn',t:fmt('vKitchenWorktop',{n:N(mmv(workH))}),fixes:[{k:'kwork',v:900,label:T('fixKitchenWorktop')}]});
+  else m.push({l:'ok',t:fmt('vKitchenWorktopOk',{n:N(mmv(workH))})});
   const needed=res.plinthH+res.baseH+res.worktopT+(cfg.kitchen.wallUnits?res.gap+res.wallH:0);
-  if(fit.H<needed)m.push({l:'err',t:`The selected kitchen heights require ${N(mmv(needed))} mm, but the room height is ${N(mmv(fit.H))} mm.`,fixes:[{k:'kitchenheight',v:N(mmv(needed)),label:`Set room height to ${N(mmv(needed))} mm`}],anchor:{x:0,y:0,w:mmv(fit.W),h:mmv(fit.H)}});
+  if(fit.H<needed)m.push({l:'err',t:fmt('vKitchenHeightErr',{needed:N(mmv(needed)),have:N(mmv(fit.H))}),fixes:[{k:'kitchenheight',v:N(mmv(needed)),label:fmt('fixKitchenHeight',{n:N(mmv(needed))})}],anchor:{x:0,y:0,w:mmv(fit.W),h:mmv(fit.H)}});
   if(free<0)m.push({l:'err',t:fmt('vKitchenOverflow',{over:N(-mmv(free))}),fixes:[{k:'kitchenfit',v:1,label:T('fixKitchenFit')}],anchor:{x:0,y:0,w:mmv(fit.W),h:mmv(fit.H)}});
   else m.push({l:'ok',t:fmt('vKitchenFit',{free:N(mmv(free))})});
   if(res.worktopPieces>1||res.plinthPieces>1)m.push({l:'ok',t:fmt('vKitchenLinearSplit',{worktop:res.worktopPieces,plinth:res.plinthPieces})});
@@ -1648,24 +1711,25 @@ function validate(cfg,fit,res){
   const m=[],P=T('parts'),W=mmv(fit.W),H=mmv(fit.H);
   if(cfg.wardrobePlanner){
     const s=wardrobePlannerStats(cfg.wardrobePlanner);
-    if(s.backFree<0)m.push({l:'err',t:`The wardrobe exceeds the back wall by ${N(Math.abs(mmv(s.backFree)))} mm.`,fixes:[{k:'plannerroom',v:'back',label:'Extend room width to fit'}]});
-    if(s.rightFree<0)m.push({l:'err',t:`The wardrobe exceeds the right wall by ${N(Math.abs(mmv(s.rightFree)))} mm.`,fixes:[{k:'plannerroom',v:'right',label:'Extend room depth to fit'}]});
-    if(s.heightFree<mm(10))m.push({l:s.heightFree<0?'err':'warn',t:`Frame-to-ceiling clearance is ${N(mmv(s.heightFree))} mm.`,fixes:[{k:'plannerroom',v:'height',label:'Set 40 mm assembly clearance'}]});
-    if(s.collisions.length){const id=s.collisions[0].obstacle;m.push({l:'err',t:`${s.collisions.length} room element collision${s.collisions.length===1?'':'s'} must be resolved.`,fixes:[{k:'plannerremoveob',v:id,label:'Remove first conflicting room element'}]});}
+    if(s.backFree<0)m.push({l:'err',t:fmt('vPlannerBack',{n:N(Math.abs(mmv(s.backFree)))}),fixes:[{k:'plannerroom',v:'back',label:T('fixPlannerWidth')}]});
+    if(s.rightFree<0)m.push({l:'err',t:fmt('vPlannerRight',{n:N(Math.abs(mmv(s.rightFree)))}),fixes:[{k:'plannerroom',v:'right',label:T('fixPlannerDepth')}]});
+    if(s.heightFree<mm(10))m.push({l:s.heightFree<0?'err':'warn',t:fmt('vPlannerHeight',{n:N(mmv(s.heightFree))}),fixes:[{k:'plannerroom',v:'height',label:T('fixPlannerClearance')}]});
+    if(s.collisions.length){const id=s.collisions[0].obstacle;m.push({l:'err',t:fmt('vPlannerCollision',{n:s.collisions.length,s:s.collisions.length===1?'':'s'}),fixes:[{k:'plannerremoveob',v:id,label:T('fixPlannerCollision')}]});}
   }
   if(res.bathroom){
     const B=res.bathroomModel,n=res.basins.length,over=res.basins.some(b=>b.x<0||b.x+b.w>fit.W||b.d>fit.D+res.worktopOverhang),overlap=n>1&&res.basins.some((b,i)=>res.basins.slice(i+1).some(q=>Math.max(b.x,q.x)<Math.min(b.x+b.w,q.x+q.w)));
     const rim=(B.floorClearance||0)+fit.H+(B.worktopT||0)+(B.basinType==='vessel'?(B.basinH||0):0);
-    if(rim<mm(800)||rim>mm(950))m.push({l:'warn',t:`Finished basin rim height is ${N(mmv(rim))} mm; verify the customer requirement.`,fixes:[{k:'bathrim',v:B.basinType==='vessel'?900:850,label:`Set finished rim to ${B.basinType==='vessel'?900:850} mm`}]});
-    else m.push({l:'ok',t:`Finished basin rim height: ${N(mmv(rim))} mm.`});
-    if(over||overlap)m.push({l:'err',t:'The basin layout does not fit the selected vanity top.',fixes:[{k:'bathlayout',v:1,label:'Fit and centre the basins'}],anchor:{x:0,y:0,w:W,h:H}});
-    if(B.basinType==='vessel'&&B.basinH<mm(20))m.push({l:'warn',t:'The countertop basin height is below 20 mm.',fixes:[{k:'bathfield',v:mm(20),c:0,label:'Set basin height to 20 mm'}]});
-    if(n)m.push({l:'ok',t:`${n} ${B.basinType==='vessel'?'countertop':'integrated'} basin${n===1?'':'s'} with ${res.cutouts.length} worktop opening${res.cutouts.length===1?'':'s'} and ${res.plumbingNotches} plumbing clearance operation${res.plumbingNotches===1?'':'s'}.`});
+    if(rim<mm(800)||rim>mm(950))m.push({l:'warn',t:fmt('vBathRim',{n:N(mmv(rim))}),fixes:[{k:'bathrim',v:B.basinType==='vessel'?900:850,label:fmt('fixBathRim',{n:B.basinType==='vessel'?900:850})}]});
+    else m.push({l:'ok',t:fmt('vBathRimOk',{n:N(mmv(rim))})});
+    if(over||overlap)m.push({l:'err',t:T('vBathLayout'),fixes:[{k:'bathlayout',v:1,label:T('fixBathLayout')}],anchor:{x:0,y:0,w:W,h:H}});
+    if(B.basinType==='vessel'&&B.basinH<mm(20))m.push({l:'warn',t:T('vBathVesselLow'),fixes:[{k:'bathfield',v:mm(20),c:0,label:T('fixBathVessel')}]});
+    if(n)m.push({l:'ok',t:fmt('vBathSummary',{n,type:T(B.basinType==='vessel'?'typeCountertop':'typeIntegrated'),
+      s1:n===1?'':'s',c:res.cutouts.length,s2:res.cutouts.length===1?'':'s',p:res.plumbingNotches,s3:res.plumbingNotches===1?'':'s'})});
   }
   if(isBed(cfg)){
     const B=bedEnsure(cfg),needW=B.mattressW+2*(B.clearance||0),needD=B.mattressL+2*(B.clearance||0);
-    if(fit.W<needW||fit.D<needD)m.push({l:'err',t:`The ${N(mmv(B.mattressW))} × ${N(mmv(B.mattressL))} mm mattress needs an outer frame of at least ${N(mmv(needW))} × ${N(mmv(needD))} mm.`,fixes:[{k:'bedfit',v:1,label:'Fit frame to mattress'}]});
-    else m.push({l:'ok',t:`Mattress opening verified for ${N(mmv(B.mattressW))} × ${N(mmv(B.mattressL))} mm.`});
+    if(fit.W<needW||fit.D<needD)m.push({l:'err',t:fmt('vBedFit',{mw:N(mmv(B.mattressW)),ml:N(mmv(B.mattressL)),needW:N(mmv(needW)),needD:N(mmv(needD))}),fixes:[{k:'bedfit',v:1,label:T('fixBedFit')}]});
+    else m.push({l:'ok',t:fmt('vBedFitOk',{mw:N(mmv(B.mattressW)),ml:N(mmv(B.mattressL))})});
   }
   const out=Math.max(fit.wOut,fit.hOut);
   if(fit.wOut>2*fit.scribe||fit.hOut>fit.scribe){
@@ -3026,32 +3090,47 @@ function buildScene(res,fit,cfg,opts){
           panel(g,frontMat,{x:-b.w/2,y:-b.h/2,z:0,w:b.w,h:b.h,d:b.d},2.0);
           decorateFront3D(g,b,frontMat,cfg.frontStyle||'flat');
         }
+        /* Z, inside this door's own group: the panel mesh spans local z
+           0..b.d, and the group is built in the SAME axis every other part
+           uses — increasing z runs from the opening toward the back wall
+           (side/top/bottom start at z:0, the back panel sits near z:D, a
+           door box itself is placed at z:-t, in FRONT of the carcass edge)
+           and the camera for the realistic view sits at negative z looking
+           toward positive z. So negative-of-0 is OUTWARD, toward whoever is
+           standing in front of the closed door, and z beyond b.d is INWARD,
+           into the cabinet. Handles must read as negative offsets (proud of
+           the outer face, where a hand reaches); hinges must read as
+           b.d+offset (recessed behind the door, against the carcass side,
+           where hinges are actually mounted). This block had every one of
+           them on the wrong side — hinges stood proud of the CLOSED door,
+           visible from the front where they can never be; handles sat
+           behind the door, inside the carcass, invisible and unreachable. */
         const hf=pt.handle||cfg.handles||'bar';
         if(hf==='knob'){
           const hx=pt.k==='drawerfront'?0:(hingeLeft?b.w/2-45:-b.w/2+45);
           const k=new T3.Mesh(new T3.SphereGeometry(11,32,24),mHan);
           const post=new T3.Mesh(new T3.CylinderGeometry(4.5,5.5,10,20),mHan);
-          post.rotation.x=Math.PI/2; post.position.set(hx,0,b.d+5);
-          k.position.set(hx,0,b.d+15);
+          post.rotation.x=Math.PI/2; post.position.set(hx,0,-5);
+          k.position.set(hx,0,-15);
           k.castShadow=post.castShadow=true; g.add(post,k);
         }else if(hf==='bar'){
           const L=pt.k==='drawerfront'?Math.min(b.w*.45,320):Math.min(b.h*.28,320);
           const bar=new T3.Mesh(new T3.CylinderGeometry(6,6,L,24),mHan);
           const hx=pt.k==='drawerfront'?0:(hingeLeft?b.w/2-40:-b.w/2+40);
           if(pt.k==='drawerfront')bar.rotation.z=Math.PI/2;
-          bar.position.set(hx,0,b.d+22); bar.castShadow=true;
+          bar.position.set(hx,0,-22); bar.castShadow=true;
           for(const sgn of [-1,1]){
             const p2=new T3.Mesh(new T3.CylinderGeometry(4,4.6,22,16),mHan);
             p2.rotation.x=Math.PI/2; p2.castShadow=true;
-            if(pt.k==='drawerfront')p2.position.set(sgn*L/2*.86,0,b.d+11);
-            else p2.position.set(hx,sgn*L/2*.86,b.d+11);
+            if(pt.k==='drawerfront')p2.position.set(sgn*L/2*.86,0,-11);
+            else p2.position.set(hx,sgn*L/2*.86,-11);
             g.add(p2);
           }
           g.add(bar);
         }else if(hf==='grooved'){
           const gola=new T3.Mesh(roundedBox(b.w,16,10,1.2),
             new T3.MeshStandardMaterial({color:0x141618,roughness:.42,metalness:.6,envMapIntensity:1.2}));
-          gola.position.set(0,-b.h/2+8,b.d-4); g.add(gola);
+          gola.position.set(0,-b.h/2+8,-4); g.add(gola);
         }
         const hingeData=pt.hinges||res.hinges;
         if(pt.k==='door'&&hingeData&&pt.frontMode!=='sliding'){
@@ -3059,10 +3138,10 @@ function buildScene(res,fit,cfg,opts){
           for(const pz of hingeData.positions){
             const cup=new T3.Mesh(new T3.CylinderGeometry(17.5,17.5,13,28),mMet);
             cup.rotation.x=Math.PI/2; cup.castShadow=true;
-            cup.position.set(left?-b.w/2+22.5:b.w/2-22.5,-b.h/2+mmv(pz),-4);
+            cup.position.set(left?-b.w/2+22.5:b.w/2-22.5,-b.h/2+mmv(pz),b.d+4);
             const arm=new T3.Mesh(roundedBox(46,14,9,1.2),mMet);
             arm.castShadow=true;
-            arm.position.set(left?-b.w/2+50:b.w/2-50,-b.h/2+mmv(pz),-16);
+            arm.position.set(left?-b.w/2+50:b.w/2-50,-b.h/2+mmv(pz),b.d+16);
             g.add(cup,arm);
           }
         }

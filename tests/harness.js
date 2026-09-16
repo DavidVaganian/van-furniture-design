@@ -93,4 +93,54 @@ function suite(name){
       return fails;
     }};
 }
-module.exports={boot,toDrawings,toStep3,suite};
+/* Minimal Three.js stand-in — just enough surface for buildScene() to run
+   headless (no WebGL) and produce a real mesh tree we can inspect. Every
+   Mesh records itself; geometries only need to exist (roundedBox reads a
+   fake BufferAttribute and calls computeVertexNormals(), nothing else). */
+function stubThree(){
+  const rec=[];
+  function V3(x=0,y=0,z=0){this.x=x;this.y=y;this.z=z;}
+  Object.assign(V3.prototype,{
+    set(x,y,z){this.x=x;this.y=y;this.z=z;return this;},
+    fromBufferAttribute(a,i){this.x=a.arr[i*3];this.y=a.arr[i*3+1];this.z=a.arr[i*3+2];return this;},
+    sub(v){this.x-=v.x;this.y-=v.y;this.z-=v.z;return this;},
+    add(v){this.x+=v.x;this.y+=v.y;this.z+=v.z;return this;},
+    length(){return Math.hypot(this.x,this.y,this.z);},
+    multiplyScalar(s){this.x*=s;this.y*=s;this.z*=s;return this;}});
+  const geo=(kind,dims)=>({kind,dims,computeVertexNormals(){},
+    attributes:{position:{count:8,arr:new Array(24).fill(0),setXYZ(){}}}});
+  function Obj3D(){
+    this.children=[];this.parent=null;this.position=new V3();this.rotation=new V3();
+    this.scale=new V3(1,1,1);this.visible=true;this.castShadow=false;this.receiveShadow=false;
+    this.userData={};
+  }
+  Obj3D.prototype.add=function(...os){this.children.push(...os);os.forEach(o=>o.parent=this);return this;};
+  /* world Z: sum of this + every ancestor's local Z (exact for the
+     closed/unrotated pose these tests inspect — nothing in that pose
+     rotates the door group, so a plain position sum matches Three's real
+     matrix math for this one axis). */
+  Obj3D.prototype.worldZ=function(){let z=0,n=this;while(n){z+=n.position.z;n=n.parent;}return z;};
+  function Mesh(g,m){Obj3D.call(this);this.geometry=g;this.material=m;rec.push(this);}
+  Mesh.prototype=Object.create(Obj3D.prototype);
+  function Group(){Obj3D.call(this);}
+  Group.prototype=Object.create(Obj3D.prototype);
+  function PointLight(){Obj3D.call(this);}
+  PointLight.prototype=Object.create(Obj3D.prototype);
+  const T3={
+    Group,Mesh,PointLight,
+    /* buildScene/roundedBox construct these with `new`, so they must be real
+       constructor functions, not arrows returning a plain object */
+    BoxGeometry:function(w,h,d){return Object.assign(this,geo('box',[w,h,d]));},
+    SphereGeometry:function(r){return Object.assign(this,geo('sphere',[r]));},
+    CylinderGeometry:function(a,b,c){return Object.assign(this,geo('cyl',[a,b,c]));},
+    PlaneGeometry:function(w,h){return Object.assign(this,geo('plane',[w,h]));},
+    TorusGeometry:function(r,tr){return Object.assign(this,geo('torus',[r,tr]));},
+    MeshStandardMaterial:function(o){Object.assign(this,o||{});},
+    MeshPhysicalMaterial:function(o){Object.assign(this,o||{});},
+    MeshBasicMaterial:function(o){Object.assign(this,o||{});},
+    Color:function(c){this.c=c;this.multiplyScalar=()=>this;},
+    Vector3:V3,CanvasTexture:function(){this.repeat={set(){}};},
+    RepeatWrapping:1,BackSide:2,DoubleSide:2};
+  return {T3,rec};
+}
+module.exports={boot,toDrawings,toStep3,suite,stubThree};
