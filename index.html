@@ -5111,7 +5111,23 @@ function renderWardrobePlanner(){
   root.querySelectorAll('[data-wp-add]').forEach(b=>b.addEventListener('click',()=>mutate('Add '+b.dataset.wpAdd,()=>{const kind=b.dataset.wpAdd,w=mm(+b.dataset.wpW),nf={id:'wf-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6),kind,wall:kind==='corner'?'right':p.addWall,w,d:p.filterDepth,h:p.filterHeight,front:'none',frontCount:1,handle:'grooved',interior:kind==='corner'?'shelves':'hanging',light:false,zones:[]};wardrobeInterior(nf,nf.interior);p.frames.push(nf);WPSEL=nf.id;})));
   root.querySelectorAll('[data-wp-act]').forEach(b=>b.addEventListener('click',()=>{const i=p.frames.findIndex(q=>q.id===b.dataset.wpId),a=b.dataset.wpAct;if(i<0||(a==='del'&&p.frames.length<=1))return;mutate('Edit frame',()=>{const same=p.frames.map((q,j)=>({q,j})).filter(x=>x.q.wall===p.frames[i].wall),at=same.findIndex(x=>x.j===i);if(a==='left'&&at>0){const j=same[at-1].j;[p.frames[j],p.frames[i]]=[p.frames[i],p.frames[j]];}else if(a==='right'&&at<same.length-1){const j=same[at+1].j;[p.frames[i],p.frames[j]]=[p.frames[j],p.frames[i]];}else if(a==='dup'){const q=JSON.parse(JSON.stringify(p.frames[i]));q.id='wf-'+Date.now().toString(36);p.frames.splice(i+1,0,q);WPSEL=q.id;}else if(a==='del'){p.frames.splice(i,1);WPSEL=p.frames[Math.min(i,p.frames.length-1)].id;}});}));
   root.querySelectorAll('[data-wp-interior]').forEach(b=>b.addEventListener('click',()=>mutate('Interior',()=>wardrobeInterior(f,b.dataset.wpInterior))));
-  root.querySelectorAll('[data-wp-front]').forEach(b=>b.addEventListener('click',()=>mutate('Fronts',()=>f.front=b.dataset.wpFront)));
+  root.querySelectorAll('[data-wp-front]').forEach(b=>b.addEventListener('click',()=>mutate('Fronts',()=>{
+    f.front=b.dataset.wpFront;
+    /* a wide frame's own sensible front count only ever applied at the
+       moment a NEW frame was created (generateWardrobePlanner falls back to
+       it only when frontCount is falsy, and every frame is created with an
+       explicit frontCount:1) — so switching an EXISTING, already-wide frame
+       to hinged doors here left it pinned at one door spanning the whole
+       frame width, however wide that was. That is what generated the
+       "suggests a ~1 m hinged door" warning: a 1000+ mm single hinged door
+       is over R.maxDoorW by construction. Re-apply the same width heuristic
+       used at creation, but only while frontCount still looks untouched
+       (===1) — an explicit choice in the Front panels field is left alone. */
+    if(f.front!=='none'&&f.frontCount===1){
+      const full=Math.max(mm(100),f.w-2*R.frontEdgeGap);
+      f.frontCount=(f.front==='sliding'&&f.w>mm(900))||(f.front==='hinged'&&full>mm(650))?2:1;
+    }
+  })));
   root.querySelectorAll('[data-wp-frontcount]').forEach(el=>el.addEventListener('change',()=>{const v=Math.round(num(el.value));if(!isFinite(v)||v<1||v>8)return renderWardrobePlanner();mutate('Front count',()=>f.frontCount=v);}));
   root.querySelectorAll('[data-wp-handle]').forEach(b=>b.addEventListener('click',()=>mutate('Handle',()=>f.handle=b.dataset.wpHandle)));
   root.querySelectorAll('[data-wp-light]').forEach(b=>b.addEventListener('click',()=>mutate('Lighting',()=>f.light=!f.light)));
