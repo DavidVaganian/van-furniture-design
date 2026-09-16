@@ -3748,20 +3748,25 @@ function readDrawing(cfg,fit,res){
           gap:M(R.frontStackGap), topAboveFloor:secH-top, bottomAboveFloor:secH-bot};
       }
       const sh=res.parts.filter(x=>x.k==='shelf'&&(x.col||0)===ci);
-      return {type:'open', shelves:z.shelves||sh.reduce((a,x)=>a+x.boxes.length,0)||1};
+      /* a rail is only ever fitted in an 'open' or 'doors' zone (see
+         generateCabinet's wantsRail check) — inside a doors zone it is
+         hidden behind the closed front and must never be mentioned to the
+         image model (see the doors band below); inside an open zone it is
+         genuinely visible, so it belongs on THIS band, not as a cabinet-wide
+         fact with no section of its own. */
+      return {type:'open', shelves:z.shelves||sh.reduce((a,x)=>a+x.boxes.length,0)||1, rail:!!z.rail};
     });
     return {n:ci+1, xLeft:xL-t, width:pf?M(pf.w):xR-xL,height:secH,depth:pf?M(pf.d):D,bands,
       exteriorFront:pf?{type:pf.front||'none',handle:pf.handle||'none'}:null};
   });
 
-  const railP=res.parts.find(p=>p.k==='rail');
   return {
     overall:{w:W,h:H,d:D,scribeEachSide:M(fit.scribe)},
     carcassPanel:t, revealGap:2,
     sectionGap:res.planner?0:(cols.length>1?t:0),
     sections,
     plinth: cfg.plinth?{height:plinthH||M(R.plinthH), setback:M(R.plinthSetback)}:null,
-    rail: railP?{diameter:M(R.railDia), sections:railP.boxes.length}:null,
+    railDiameter:M(R.railDia),   /* which band(s) actually carry a rail is on that band's own `rail` flag, not a cabinet-wide fact */
     finish:{
       style:cfg.frontStyle||'flat',
       styleLabel:(EN.styles[cfg.frontStyle||'flat']||'Flat slab'),
@@ -3831,11 +3836,17 @@ function describeDrawing(s){
       const pos=nb===1?'The whole section':bi===0?'TOP band':bi===nb-1?'BOTTOM band (just above the plinth)':`band ${bi+1} from the top`;
       const range=`(${b.type==='open'?'':`${b.bottomAboveFloor}–${b.topAboveFloor} mm above the floor, ${b.topAboveFloor-b.bottomAboveFloor} mm tall — `}`;
       if(b.type==='doors'){
-        parts.push(`  · ${pos}: ${range}${b.count===1?'1 hinged door':b.pair?'2 hinged doors meeting at the section centre':b.count+' hinged doors side by side'}, each ${b.eachW} mm wide × ${b.eachH} mm tall). Each has ${doorH}.${b.internalShelves?` ${b.internalShelves} fixed shelf inside.`:''}`);
+        /* whatever is behind a closed door (shelves, a rail, anything) is
+           invisible from outside — say so explicitly, in the same sentence,
+           instead of naming it and trusting the model not to draw it. This
+           is the exact failure reported: an internal shelf/rail behind a
+           closed door came out as a visible open shelf with the door gone. */
+        const hidden=b.internalShelves?` (hidden — ${b.internalShelves} fixed shelf inside, behind the closed door, NOT visible)`:'';
+        parts.push(`  · ${pos}: ${range}${b.count===1?'1 hinged door':b.pair?'2 hinged doors meeting at the section centre':b.count+' hinged doors side by side'}, each ${b.eachW} mm wide × ${b.eachH} mm tall). Each has ${doorH}. The door is a solid, opaque, CLOSED front — nothing behind it is visible${hidden}.`);
       }else if(b.type==='drawers'){
-        parts.push(`  · ${pos}: ${range}${b.count} drawer fronts in a vertical stack, each ${b.eachW} mm wide; heights top-to-bottom ${b.heights.join(' / ')} mm; ${b.gap} mm gap between fronts). Each has ${drawerH}.`);
+        parts.push(`  · ${pos}: ${range}${b.count} drawer fronts in a vertical stack, each ${b.eachW} mm wide; heights top-to-bottom ${b.heights.join(' / ')} mm; ${b.gap} mm gap between fronts). Each has ${drawerH}. Only the drawer fronts are visible — no open box, no interior.`);
       }else{
-        parts.push(`  · ${pos}: an OPEN compartment, no front, ${b.shelves} fixed ${b.shelves>1?'shelves':'shelf'} evenly spaced; plain carcass interior visible.`);
+        parts.push(`  · ${pos}: an OPEN compartment, no front — the plain carcass interior IS visible here, ${b.shelves} fixed ${b.shelves>1?'shelves':'shelf'} evenly spaced.${b.rail?' A round metal clothes rail runs near the top of this compartment, visible.':''}`);
       }
     });
     return parts.join('\n');
@@ -3851,10 +3862,14 @@ s.sections.length>1
 `Top-to-bottom band order (obey this — it is often not the usual layout): ${orderAll}.`,
 ...secLines,
 s.plinth?`A recessed plinth ${s.plinth.height} mm tall runs along the whole floor, set back ${s.plinth.setback} mm so the lowest fronts overhang it.`:`No plinth — the lowest fronts run to the floor.`,
-s.rail?`A round metal clothes rail (Ø${s.rail.diameter} mm) spans the top of the open area, ~60 mm below its top edge.`:'',
 `Every front is set into the carcass with a uniform ${s.revealGap} mm shadow-gap reveal on all four sides. The carcass shows a ${s.carcassPanel} mm edge around the whole opening.`,
 `MATERIAL: ${styleTxt}, in ${s.finish.materialLabel.toLowerCase()}, ${s.finish.finishLabel.toLowerCase()} finish, colour ${s.finish.colourName} ${s.finish.colourHex}. The carcass, edges and interior are the same colour. ${isBar||isKnob?`Handles are brushed steel.`:''}`,
-`Nothing else: no extra shelves, rails, glazing, mirrors, legs or open bays unless named above.`
+/* explicit "forbidden changes" list — every one of these is a real failure
+   mode already seen from this model: a closed section rendered open with
+   its hidden interior exposed, a rail or shelf moved to a section that
+   never had it, sections re-ordered or mirrored, symmetry added where the
+   drawing is deliberately asymmetric. */
+`Do not remove a door to reveal what is behind it. Do not turn a closed section into an open one. Do not move a shelf, rail, drawer or door from the section it is listed under to any other section. Do not reorder or mirror the sections. Do not add shelves, rails, drawers, doors, handles, glazing, legs or symmetry that is not explicitly listed above — an asymmetric layout stays asymmetric. Nothing else: only what is named above.`
   ].filter(Boolean).join('\n');
 }
 
