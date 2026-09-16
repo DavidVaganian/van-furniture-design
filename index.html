@@ -1512,7 +1512,22 @@ function generateWardrobePlanner(cfg,fit){
       parts.push(q);
     }
     nDoor+=r.nDoor||0;nShelf+=r.nShelf||0;totalHinges+=r.totalHinges||0;
-    if(f.front&&f.front!=='none'){
+    /* §3 §6 — a frame's own exterior front (f.front) and its interior
+       zones' own doors/drawers must never BOTH generate a physical front
+       for the same frame: wardrobePlannerEnsure() converts an incoming
+       'doors' zone to 'open' + sets front:'hinged' specifically so this
+       never happens at first setup — but nothing re-applies that rule when
+       zones change afterwards. Adding a doors/drawers zone through the 3D
+       Studio's own generic "Add" cards (studioAdd, which knows nothing
+       about the planner's exterior-front concept) writes straight into
+       cfg.columns[].zones and recreates exactly this: a full-frame door
+       generated here AND the interior zone's own door/drawer fronts,
+       overlapping in the same space — the "3D studio ser helt forkert ud"
+       report. Skip the frame-level front the moment the interior already
+       provides its own; that is always the more specific, more recently
+       edited choice. */
+    const interiorHasOwnFront=(f.zones||[]).some(z=>z.type==='doors'||z.type==='drawers');
+    if(f.front&&f.front!=='none'&&!interiorHasOwnFront){
       const full=Math.max(mm(100),f.w-2*R.frontEdgeGap),count=Math.max(1,Math.min(8,+f.frontCount||((f.front==='sliding'&&f.w>mm(900))||f.front==='hinged'&&full>mm(650)?2:1)));
       const fw=Math.round((full-(count-1)*R.frontCentreGap)/count),fl=f.h-2*R.frontEdgeGap,boxes=[];
       for(let j=0;j<count;j++)boxes.push({x:offset+R.frontEdgeGap+j*(fw+R.frontCentreGap),y:yOffset+R.frontEdgeGap,z:-R.panelT*2,w:fw,h:fl,d:R.panelT});
