@@ -1,5 +1,5 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
-const html=fs.readFileSync('VAN-test-v16.html','utf8');
+const html=fs.readFileSync('index.html','utf8');
 const fixtures=JSON.parse(fs.readFileSync('vision-fixtures-v4.json','utf8'));
 assert.equal(fixtures.fixtures.length,4);for(const f of fixtures.fixtures)if(f.file)assert(fs.existsSync(f.file),f.file+' missing');
 for(const m of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);

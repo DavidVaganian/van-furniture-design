@@ -1411,6 +1411,43 @@ function compactCutParts(res){
     if(g)g.q+=p.q;else groups.set(key,{...p,boxes:p.boxes.slice(0,1)});}
   return [...groups.values()];
 }
+/* §3 §6 — ONE numbering, shared by the on-screen cut list, the printed
+   schedule panel and every balloon drawn on any sheet, so "#14" always means
+   the same physical piece everywhere it is printed. Both consumers already
+   number rows by walking compactCutParts(res) in order (which for a kitchen
+   merges same-dimension pieces from different parts, and always expands a
+   varied drawer/divider front into one row per distinct length) — this walks
+   res.parts in that exact same order and records, for every (part index, box
+   index), which row it landed in, so a balloon anywhere can look its number
+   up instead of using the raw res.parts index (which drifts the moment any
+   merge or expansion happens — the two used to disagree silently). */
+function scheduleRowNumbers(res){
+  const byBox=new Map(), keyRow=new Map(); let next=1;
+  res.parts.forEach((p,partIdx)=>{
+    const varied=(p.k==='drawerfront'||p.k==='divider')&&p.varied;
+    const entries=varied
+      ? p.varied.map((h,i)=>({key:[p.k,h-(p.fl-p.cl),p.cw,p.th,p.mat,p.edgeCode||'',p.edgeWhere||''].join('|'),boxIdx:i}))
+      : [{key:[p.k,p.cl,p.cw,p.th,p.mat,p.edgeCode||'',p.edgeWhere||''].join('|'),boxIdx:null}];
+    entries.forEach(e=>{
+      let row;
+      if(res.kitchen){row=keyRow.get(e.key); if(row==null){row=next++;keyRow.set(e.key,row);}}
+      else row=next++;
+      byBox.set(partIdx+':'+(e.boxIdx==null?'*':e.boxIdx),row);
+    });
+  });
+  return{
+    /* the printed number for res.parts[partIdx]'s box boxIdx — falls back to
+       the part's single row when it has no per-box numbering (not varied) */
+    of(partIdx,boxIdx){
+      return byBox.get(partIdx+':'+boxIdx) ?? byBox.get(partIdx+':*');
+    },
+    /* true when this (partIdx,boxIdx) is a distinct physical piece that needs
+       its own balloon — a varied front/divider, where each box is a different
+       length, vs. an ordinary part where every box is an interchangeable
+       duplicate and one balloon (on the first box) already speaks for all */
+    isDistinct(p){ return (p.k==='drawerfront'||p.k==='divider')&&!!p.varied; }
+  };
+}
 /* B2: templates only. Nothing here is a literal sentence. */
 /* ── sheet geometry and drawing constants ──────────────────────
    Declared here because validation, the elevation and the schedule all
@@ -1803,13 +1840,13 @@ function drawPanel(b,o,ox,oy,sc,opt){
   return g;
 }
 function buildItems(res,fit,explode,hideFronts){
-  const items=[];let i=0;
-  for(const p of res.parts){ i++;
-    if(hideFronts&&(p.k==='door'||p.k==='drawerfront'||p.k==='filler'))continue;
+  const items=[];const RN=scheduleRowNumbers(res);
+  res.parts.forEach((p,partIdx)=>{
+    if(hideFronts&&(p.k==='door'||p.k==='drawerfront'||p.k==='filler'))return;
     /* drawer boxes are interior clutter in a general view — the schedule
        lists them, the exploded view shows them. Not here. */
-    if(!explode&&/^drawer(side|fb|base)$/.test(p.k))continue;
-    for(const b0 of p.boxes){
+    if(!explode&&/^drawer(side|fb|base)$/.test(p.k))return;
+    p.boxes.forEach((b0,bi)=>{
       const home={x:mmv(b0.x),y:mmv(b0.y),z:mmv(b0.z),w:mmv(b0.w),h:mmv(b0.h),d:mmv(b0.d)};
       let b={...home};
       if(explode){
@@ -1818,11 +1855,14 @@ function buildItems(res,fit,explode,hideFronts){
         else if(th===b.h) b.y+=(b.y+b.h/2<H/2?-1:1)*H*.22;
         else              b.z+=(b.z<D/2?-1:1)*D*.80;
       }
-      items.push({b,home,k:p.k,mat:p.mat,n:i,
+      /* the schedule's own row number, not the raw res.parts index — a
+         kitchen merges same-size pieces into one row, and a varied front or
+         divider is several rows, one per distinct length (§3, §6). */
+      items.push({b,home,k:p.k,mat:p.mat,n:RN.of(partIdx,bi),
         heavy:/^(side|top|bottom|divider)$/.test(p.k),
         fill:p.k==='filler'?SURF.filler:(p.mat==='front'?(res.colour||SURF.front):SURF.face)});
-    }
-  }
+    });
+  });
   if(res.kitchen&&!explode)for(const a of res.appliances){
     const b={x:mmv(a.x),y:mmv(a.y),z:-18,w:mmv(a.w),h:mmv(a.h),d:20};
     items.push({b,home:{...b},k:a.type,mat:'appliance',n:0,heavy:false,fill:'#DDE2E6'});
@@ -2017,6 +2057,7 @@ function elevationSheet(res,fit,cfg,axis){
     g+=`<line x1="${x}" y1="${Ys(ch)}" x2="${x-1.5}" y2="${Ys(ch)+1.5}" stroke="${GREY}" stroke-width="${LW}"/>`;}
 
   const bl=[];
+  const RN=scheduleRowNumbers(res);
   res.parts.forEach((p,idx)=>{
     let first=true;
     p.boxes.forEach((b,bi)=>{
@@ -2044,7 +2085,11 @@ function elevationSheet(res,fit,cfg,axis){
         g+=`<text x="${(X0+2.4).toFixed(2)}" y="${(Y0+3.4).toFixed(2)}" font-family="${TEC}"
           font-size="2.9" fill="${GREY}">D</text>`;
       }
-      if(first){bl.push({x:X0+W0/2,y:Y0+H0/2,n:idx+1});first=false;}
+      /* one balloon per physically-distinct piece: the first box always
+         gets one, and so does every box of a varied front/divider — each is
+         a different length and its own schedule row, so it needs its own
+         number instead of silently sharing the first box's balloon (§6). */
+      if(first||RN.isDistinct(p)){bl.push({x:X0+W0/2,y:Y0+H0/2,n:RN.of(idx,bi)});first=false;}
     });
   });
   if(front&&res.kitchen){
@@ -3992,10 +4037,21 @@ function pushHistory(stack,st,label){
 function mark(label){
   if(!cfg)return;
   pushHistory(UNDO,snapshot(false),label); REDO.length=0; paintUndo();
+  /* every undoable mutation invalidates a pointer-based 3D Studio selection
+     the same way step-3/step-2 edits already invalidate SEL below — mark()
+     is the one choke point every one of them already goes through, so this
+     is the single place to catch all of them instead of hunting down each
+     call site (studioAdd/studioRemove/studioMoveSelection null it themselves
+     right after their OWN edit, so this is a no-op there; what it actually
+     fixes is a selection left over from a PRIOR studio visit surviving a
+     step-3/step-2 edit made after leaving the studio — studioTarget() would
+     otherwise resolve STUDIO_SEL's cached col/zi against the new structure
+     and show a stale "selected" badge for a part that no longer matches). */
+  STUDIO_SEL=null;
 }
 function restoreSnapshot(st){
   if(!st||!st.cfg)return false;
-  cfg=cleanClone(st.cfg); SEL=null;
+  cfg=cleanClone(st.cfg); SEL=null; STUDIO_SEL=null;   /* undo/redo/load bypass mark() above */
   if(cfg.columns&&cfg.columns.length)cfg.zones=cfg.columns[0].zones;
   if(st.project)Object.assign(PROJ,st.project);
   if(st.category!==undefined)CAT=st.category;

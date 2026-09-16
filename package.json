@@ -1,0 +1,12 @@
+{
+  "name": "van-v16",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VAN (edge_research_phase0 track) v16 — stabilization pass",
+  "scripts": {
+    "test": "node tests/run.js",
+    "smoke": "node legacy-smoke.cjs",
+    "start": "python3 -m http.server 8766"
+  },
+  "devDependencies": { "jsdom": "^24.1.3" }
+}
