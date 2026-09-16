@@ -3935,6 +3935,98 @@ function svgToPngDataURL(svg,pxW,pxH){
     }catch(e){finish(null);}
   });
 }
+/* ── STEP 1b (owner-specified) · an independent READING pass over the
+   drawing image, before generation ─────────────────────────────────────
+   readDrawing()/describeDrawing() above already build the image prompt
+   straight from res.parts — the exact geometry the saw cuts (§3) — with
+   zero uncertainty, since it is VAN's own drawing, not a photograph. What
+   this adds, at the owner's explicit request and using the two prompts
+   they supplied: an independent verification pass that reads the actual
+   drawing IMAGE (not just the computed numbers) through the vision model,
+   with the same computed data attached as the "structured model data" its
+   own prompt expects, and returns one locked, literal construction spec —
+   including an explicit visible/hidden split — that STEP 2 then renders
+   from instead of re-deriving its own text. If this pass is unavailable
+   or fails, STEP 2 falls back to describeDrawing()'s own text (unchanged
+   from before) rather than blocking image generation entirely. */
+const DRAWING_READ_SCHEMA={type:'object',additionalProperties:false,properties:{
+  status:{type:'string',enum:['ready','needs_resolution']},
+  overall_dimensions:{type:'object',additionalProperties:false,
+    properties:{width_mm:{type:'number'},height_mm:{type:'number'},depth_mm:{type:'number'}},
+    required:['width_mm','height_mm','depth_mm']},
+  sections_left_to_right:{type:'array',items:{type:'object',additionalProperties:false,properties:{
+    index:{type:'integer'},width_mm:{type:'number'},
+    bands_top_to_bottom:{type:'array',items:{type:'object',additionalProperties:false,properties:{
+      type:{type:'string',enum:['doors','drawers','open']},
+      count:{type:'integer'},
+      top_above_floor_mm:{type:'number'},bottom_above_floor_mm:{type:'number'},
+      visible_from_outside:{type:'boolean'},
+      hidden_contents:{type:'string'}},
+      required:['type','count','top_above_floor_mm','bottom_above_floor_mm','visible_from_outside','hidden_contents']}}},
+    required:['index','width_mm','bands_top_to_bottom']}},
+  materials:{type:'object',additionalProperties:false,properties:{
+    material:{type:'string'},finish:{type:'string'},colour_hex:{type:'string'},handle_type:{type:'string'}},
+    required:['material','finish','colour_hex','handle_type']},
+  counts_visible:{type:'object',additionalProperties:false,
+    properties:{doors:{type:'integer'},drawer_fronts:{type:'integer'},open_shelves:{type:'integer'}},
+    required:['doors','drawer_fronts','open_shelves']},
+  counts_hidden:{type:'object',additionalProperties:false,
+    properties:{shelves:{type:'integer'},rails:{type:'integer'}},required:['shelves','rails']},
+  render_description:{type:'string'},
+  forbidden_changes:{type:'array',items:{type:'string'}},
+  uncertainties:{type:'array',items:{type:'string'}},
+  conflicts:{type:'array',items:{type:'string'}}},
+  required:['status','overall_dimensions','sections_left_to_right','materials','counts_visible','counts_hidden',
+    'render_description','forbidden_changes','uncertainties','conflicts']};
+const DRAWING_READ_PROMPT=`You are a technical furniture constructor. Your task is to describe the EXISTING construction precisely, for a visualization made afterwards. You must not design, improve or rearrange the furniture.
+
+SOURCES AND UNCERTAINTY
+Use the attached structured model data (given below as JSON) as the source for dimensions and part placement — it comes from the exact same revision as the drawing image.
+Use the drawing image to verify the visible structure and confirm nothing was lost in translation.
+Use the material specification (also below) for surfaces and colours.
+If the drawing and the structured data conflict, record the conflict explicitly — do not silently pick whichever seems more plausible.
+Never derive an exact millimetre dimension from the image's pixels alone; the structured data is authoritative for numbers.
+
+COORDINATES
+Left and right are as seen by a viewer standing in front of the piece.
+Number sections S1, S2, S3… left to right.
+Describe each section's bands top to bottom, and give each band's top and bottom position as millimetres above the floor, so the order can never be misread.
+
+VISIBILITY IS DECISIVE
+Separate, for every part:
+A. Exterior parts, visible from outside.
+B. Parts visible through a genuinely open compartment.
+C. Interior parts hidden behind a closed front.
+A drawer behind a closed door is NOT a visible drawer front. A shelf behind a closed door must NOT become an open shelf. A rail behind a closed door must NOT cause the door to be removed or the section to be drawn as open. Preserve exactly the open/closed state the drawing shows for every front.
+
+OUTPUT
+Return only the structured JSON object matching the given schema.
+render_description must be one concrete, literal description: first the whole piece, then each section left to right, and within each section each band top to bottom — precisely what is visible, what is hidden, and what sits above, below and beside what. This is the text the image generator will render from, so state it as an instruction, not a caption.
+forbidden_changes must list, as plain sentences, the specific mistakes a naive image generator is likely to make on THIS construction (for example: do not remove the doors on section 2, do not add a rail to the closed section, do not mirror the run) — not a generic boilerplate list.
+
+CHECK
+Cross-check every count, dimension, position and visibility claim against the structured model data before answering. If anything about construction, fronts or materials could not be resolved, set status to "needs_resolution" and list it in conflicts or uncertainties rather than guessing.`;
+
+async function readDrawingViaVision(res,fit,cfg,drawingPngDataURL){
+  const spec=readDrawing(cfg,fit,res);
+  const structured=JSON.stringify(spec);
+  const prompt=DRAWING_READ_PROMPT+'\n\nSTRUCTURED MODEL DATA (same revision as the attached drawing):\n'+structured;
+  const b64=drawingPngDataURL.split(',')[1];
+  return callVisionJSON(prompt,DRAWING_READ_SCHEMA,'drawing_reading',b64,'image/png',4000);
+}
+function buildImagePromptFromReading(reading,hasReference){
+  return [
+    `Photorealistic straight-on studio product photograph, square to camera, whole piece centred and entirely in frame with no cropping of the top, sides or plinth, parallel vertical lines with minimal perspective distortion, on a seamless pale-grey background with soft neutral lighting that reads the material colours correctly and a faint contact shadow. No people, no props, no text, no dimension lines.`,
+    hasReference?`The attached reference images are a clean front view and the annotated technical drawing of this exact, FIXED construction — the section order, band layout and every front's position and size are locked. Match them exactly; ignore the technical drawing's dimension lines, balloons and title block, they are annotations only, not physical parts.`:'',
+    `CONSTRUCTION SPECIFICATION — this is a visualization of a fixed, already-decided construction. Counts, positions and proportions are locked.\n${reading.render_description}`,
+    reading.forbidden_changes&&reading.forbidden_changes.length?`Do not: ${reading.forbidden_changes.join(' ')}`:'',
+    `Hidden parts stay hidden: never show an internal drawer as an external drawer front, never remove a door to reveal shelves, a rail or lighting behind it. Do not add symmetry, extra shelves, drawers, handles or panels. Do not move a part between sections. Do not mirror the piece. Do not turn a door into a drawer or an open compartment.`,
+    `MATERIAL: ${reading.materials.material}, ${reading.materials.finish} finish, colour ${reading.materials.colour_hex}. Handles: ${reading.materials.handle_type}. Apply it to the correct parts only; do not draw grain on a specified plain lacquered front.`,
+    `Remove only technical annotations: dimension lines, text, part numbers, opening diagonals and guide lines must not appear in the final image. Physical edges, joints, reveals and handles must be preserved.`,
+    `Render as a clean catalogue photo of the finished piece. Customer illustration — not to scale, not a production drawing.`
+  ].filter(Boolean).join('\n\n');
+}
+
 function buildImagePrompt(cfg,fit,res,hasReference){
   const kind=((cfg.subject||'').replace(/-/g,' ').trim())||'fitted cabinet';
   const spec=readDrawing(cfg,fit,res);
@@ -3946,25 +4038,30 @@ function buildImagePrompt(cfg,fit,res,hasReference){
   ].filter(Boolean).join('\n\n');
 }
 
-async function aiRenderImage(prompt,hiQ,W,H,refPngDataURL){
+async function aiRenderImage(prompt,hiQ,W,H,refPngDataURLs){
   if(!AI.has())throw new Error('no-key');
   const size=W>H*1.15?'1536x1024':(H>W*1.15?'1024x1536':'1024x1024');
-  /* with a reference image (the clean front view rendered above), use the
-     image-EDIT endpoint so the model receives the actual layout as a
-     picture, not text alone — /v1/images/generations is text-to-image only
-     and cannot take a reference. Falls back to the old text-only call if
-     rasterizing the reference failed for any reason (svgToPngDataURL never
-     throws, but a very old browser or a canvas-security error still could
-     leave refPngDataURL null) — degrade, don't block the feature. */
-  if(refPngDataURL){
-    const blob=await(await fetch(refPngDataURL)).blob();
+  /* with one or more reference images (the clean front view, and — when
+     the STEP 1 reading pass ran — the annotated technical drawing too),
+     use the image-EDIT endpoint, which accepts a reference image[] array,
+     so the model receives the actual layout as a picture, not text alone —
+     /v1/images/generations is text-to-image only and cannot take a
+     reference. Falls back to the old text-only call if rasterizing every
+     reference failed (svgToPngDataURL never throws, but a very old browser
+     or a canvas-security error still could leave every one null) —
+     degrade, don't block the feature. */
+  const refs=(Array.isArray(refPngDataURLs)?refPngDataURLs:[refPngDataURLs]).filter(Boolean);
+  if(refs.length){
     const form=new FormData();
     form.append('model',AI.model.image);
     form.append('prompt',prompt);
     form.append('size',size);
     form.append('quality',hiQ?'high':'low');
     form.append('n','1');
-    form.append('image',blob,'reference.png');
+    for(let i=0;i<refs.length;i++){
+      const blob=await(await fetch(refs[i])).blob();
+      form.append('image[]',blob,'reference-'+i+'.png');
+    }
     const r=await fetch('https://api.openai.com/v1/images/edits',{method:'POST',
       headers:{Authorization:'Bearer '+AI.getKey()},body:form});
     const d=await r.json();
@@ -4029,7 +4126,37 @@ function renderAIView(res,fit,cfg){
       const refSvg=frontPreviewSVG(res,fit,cfg);
       const refH=+(refSvg.match(/height="(\d+)"/)||[])[1]||1024;
       const refPng=await svgToPngDataURL(refSvg,1024,refH);
-      AIIMG[ck]=await aiRenderImage(prompt,aiHiQ,mm(fit.W),mm(fit.H),refPng);
+      /* STEP 1b — an independent reading pass over the actual TECHNICAL
+         drawing (with dimensions, so the reading can cross-check them),
+         separate from the clean reference above. If it succeeds and finds
+         no unresolved conflict, STEP 2 renders from ITS locked description
+         instead of describeDrawing()'s text, and both images go along as
+         references. Any failure (no key, network, a bad response) falls
+         straight back to the existing text-only description — the feature
+         degrades, it never blocks generation (§5). */
+      let goPrompt=prompt, goRefs=[refPng], reading=null;
+      try{
+        const drawingSvg=elevationSheet(res,fit,cfg,'front');
+        const drawingH=+(drawingSvg.match(/height="(\d+)"/)||[])[1]||undefined;
+        const drawingPng=await svgToPngDataURL(drawingSvg,1024,drawingH||1024*297/420);
+        if(drawingPng)reading=await readDrawingViaVision(res,fit,cfg,drawingPng).then(r=>({...r,drawingPng}));
+      }catch(readErr){
+        /* the reading pass itself is unavailable (no key, network, a bad
+           response) — that is not a conflict in the construction, so fall
+           back to the text-only description exactly as before. */
+        console.warn('[VAN] drawing reading pass unavailable, using the text-only description instead:',readErr);
+      }
+      if(reading){
+        /* the pass ran and returned an opinion — a genuine unresolved
+           conflict must stop generation and tell the user why (§5), not be
+           silently swallowed the way a network failure is above. */
+        if(reading.status==='needs_resolution'||(reading.conflicts&&reading.conflicts.length))
+          throw new Error((reading.conflicts&&reading.conflicts[0])||'The drawing reading found an unresolved conflict.');
+        goPrompt=buildImagePromptFromReading(reading,true);
+        goRefs=[refPng,reading.drawingPng];
+        console.log('%c[VAN] STEP 1b drawing reading (independent check)','font-weight:700;color:#1F6FEB',reading);
+      }
+      AIIMG[ck]=await aiRenderImage(goPrompt,aiHiQ,mm(fit.W),mm(fit.H),goRefs);
     }
     catch(err){ aiErrMsg=err.message; }
     if(view==='ai')renderAIView(res,fit,cfg);
